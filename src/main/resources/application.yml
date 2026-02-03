@@ -1,15 +1,9 @@
 server:
-  port: 80
+  port: 18080
+
 spring:
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-#    url: jdbc:mysql://${MYSQL_ADDRESS}/${MYSQL_DATABASE:plant_helper}
-#    username: ${MYSQL_USERNAME}
-#    password: ${MYSQL_PASSWORD}
-#    连接前确定ip地址 wsl hostname -I
-    url: jdbc:mysql://localhost:3306/plant_helper?allowPublicKeyRetrieval=true
-    username: u_plant_helper
-    password: $zshpdMiMa1
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
   mvc:
     view:
       suffix: .html

@@ -1,0 +1,19 @@
+# 开发/测试环境配置
+server:
+  port: 18080
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # 连接前确定ip地址 wsl hostname -I
+    url: jdbc:mysql://localhost:3306/plant_helper?allowPublicKeyRetrieval=true
+    username: u_plant_helper
+    password: $zshpdMiMa1
+# 开发环境日志配置
+logging:
+  level:
+    com.tencent.wxcloudrun: DEBUG
+    org.springframework: INFO
+    org.mybatis: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
