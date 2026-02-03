@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @MapperScan(basePackages = {"com.tencent.wxcloudrun.dao"})
 class DatabaseIntegrationTest {
 
-    @Autowired
+    @Resource
     private PlantMapper plantMapper;
 
     @Test

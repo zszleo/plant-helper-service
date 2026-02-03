@@ -9,6 +9,7 @@ import com.tencent.wxcloudrun.service.ReminderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -19,14 +20,10 @@ import java.util.List;
 @Service
 public class ReminderServiceImpl implements ReminderService {
 
-    private final ReminderMapper reminderMapper;
-    private final PlantMapper plantMapper;
-
-    @Autowired
-    public ReminderServiceImpl(ReminderMapper reminderMapper, PlantMapper plantMapper) {
-        this.reminderMapper = reminderMapper;
-        this.plantMapper = plantMapper;
-    }
+    @Resource
+    private ReminderMapper reminderMapper;
+    @Resource
+    private PlantMapper plantMapper;
 
     @Override
     public List<Reminder> getRemindersByUserId(String userId) {

@@ -7,6 +7,7 @@ import com.tencent.wxcloudrun.service.PlantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -16,12 +17,8 @@ import java.util.List;
 @Service
 public class PlantServiceImpl implements PlantService {
 
-    private final PlantMapper plantMapper;
-
-    @Autowired
-    public PlantServiceImpl(PlantMapper plantMapper) {
-        this.plantMapper = plantMapper;
-    }
+    @Resource
+    private PlantMapper plantMapper;
 
     @Override
     public List<Plant> getPlantsByUserId(String userId) {

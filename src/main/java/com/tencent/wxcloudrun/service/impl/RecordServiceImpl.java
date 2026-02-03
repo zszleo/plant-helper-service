@@ -9,6 +9,7 @@ import com.tencent.wxcloudrun.service.RecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -18,14 +19,10 @@ import java.util.List;
 @Service
 public class RecordServiceImpl implements RecordService {
 
-    private final RecordMapper recordMapper;
-    private final PlantMapper plantMapper;
-
-    @Autowired
-    public RecordServiceImpl(RecordMapper recordMapper, PlantMapper plantMapper) {
-        this.recordMapper = recordMapper;
-        this.plantMapper = plantMapper;
-    }
+    @Resource
+    private RecordMapper recordMapper;
+    @Resource
+    private PlantMapper plantMapper;
 
     @Override
     public List<Record> getRecordsByUserId(String userId) {

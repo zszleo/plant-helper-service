@@ -7,6 +7,7 @@ import com.tencent.wxcloudrun.service.RecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -17,12 +18,8 @@ import java.util.List;
 @RequestMapping("/api/records")
 public class RecordController {
 
-    private final RecordService recordService;
-
-    @Autowired
-    public RecordController(RecordService recordService) {
-        this.recordService = recordService;
-    }
+    @Resource
+    private RecordService recordService;
 
     /**
      * 获取用户的所有记录

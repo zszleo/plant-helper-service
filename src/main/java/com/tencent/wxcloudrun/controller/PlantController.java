@@ -7,6 +7,7 @@ import com.tencent.wxcloudrun.service.PlantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -17,12 +18,8 @@ import java.util.List;
 @RequestMapping("/api/plants")
 public class PlantController {
 
-    private final PlantService plantService;
-
-    @Autowired
-    public PlantController(PlantService plantService) {
-        this.plantService = plantService;
-    }
+    @Resource
+    private PlantService plantService;
 
     /**
      * 获取用户的所有植物
