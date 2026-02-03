@@ -13,7 +13,8 @@ COPY settings.xml pom.xml /app/
 
 # 执行代码编译命令
 # 自定义settings.xml, 选用国内镜像源以提高下载速度
-RUN mvn -s /app/settings.xml -f /app/pom.xml clean package
+# 跳过测试以加快构建速度
+RUN mvn -s /app/settings.xml -f /app/pom.xml clean package -DskipTests
 
 # 选择运行时基础镜像
 FROM alpine:3.13
@@ -38,11 +39,11 @@ COPY --from=build /app/target/*.jar .
 
 # 暴露端口
 # 此处端口必须与「服务设置」-「流水线」以及「手动上传代码包」部署时填写的端口一致，否则会部署失败。
-EXPOSE 18080
+EXPOSE 80
 
 # 设置环境变量，默认使用开发环境
 # 可通过构建参数 ARG 或环境变量 ENV 覆盖
-ENV SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
+ENV SPRING_PROFILES_ACTIVE=prod
 
 # 执行启动命令.
 # 写多行独立的CMD命令是错误写法！只有最后一行CMD命令会被执行，之前的都会被忽略，导致业务报错。
