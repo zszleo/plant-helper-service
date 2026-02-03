@@ -42,8 +42,8 @@ COPY --from=build /app/target/*.jar .
 EXPOSE 18080
 
 # 设置环境变量，默认使用开发环境
-# 可通过构建参数 ARG 或环境变量 ENV 覆盖
-ENV SPRING_PROFILES_ACTIVE=prod
+# 可通过构建参数 ARG 或环境变量 ENV 覆盖 CBR_ENV_ID
+ENV SPRING_PROFILES_ACTIVE=${CBR_ENV_ID}
 
 # 执行启动命令.
 # 写多行独立的CMD命令是错误写法！只有最后一行CMD命令会被执行，之前的都会被忽略，导致业务报错。
