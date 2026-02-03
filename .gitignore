@@ -34,6 +34,8 @@ build/
 *.min.js
 *.min.css
 unpackage/
+target/
+out/
 
 # 环境变量文件
 .env
