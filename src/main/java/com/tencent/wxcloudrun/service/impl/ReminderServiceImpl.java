@@ -6,7 +6,6 @@ import com.tencent.wxcloudrun.dto.req.ReminderRequest;
 import com.tencent.wxcloudrun.model.Plant;
 import com.tencent.wxcloudrun.model.Reminder;
 import com.tencent.wxcloudrun.service.ReminderService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

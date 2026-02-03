@@ -4,7 +4,6 @@ import com.tencent.wxcloudrun.dao.PlantMapper;
 import com.tencent.wxcloudrun.dto.req.PlantRequest;
 import com.tencent.wxcloudrun.model.Plant;
 import com.tencent.wxcloudrun.service.PlantService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

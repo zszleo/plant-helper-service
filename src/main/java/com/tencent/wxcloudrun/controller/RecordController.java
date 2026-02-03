@@ -4,7 +4,6 @@ import com.tencent.wxcloudrun.dto.resp.ApiResponse;
 import com.tencent.wxcloudrun.dto.req.RecordRequest;
 import com.tencent.wxcloudrun.model.Record;
 import com.tencent.wxcloudrun.service.RecordService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
