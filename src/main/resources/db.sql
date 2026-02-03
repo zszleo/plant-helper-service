@@ -1,5 +1,4 @@
 -- 植物种植助手数据库初始化脚本
--- 注意：此脚本需要在现有Counters表基础上扩展
 
 -- 创建用户表（用于数据关联，无需认证）
 CREATE TABLE IF NOT EXISTS `users` (

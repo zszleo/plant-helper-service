@@ -22,20 +22,20 @@ public class ApiResponse<T> implements Serializable {
     this.message = message;
     this.data = data;
   }
+
+  public static <T> ApiResponse<T> of(int code, String message, T data) {
+    return new ApiResponse<>(code, message, data);
+  }
   
   public  static <T> ApiResponse<T> ok(String message) {
-    return new ApiResponse(CodeEnum.SUCCESS.getCode(), message, null);
+    return new ApiResponse<>(CodeEnum.SUCCESS.getCode(), message, null);
   }
 
   public  static <T> ApiResponse<T> ok(T data) {
-    return new ApiResponse(CodeEnum.SUCCESS.getCode(), "", data);
-  }
-
-  public  static <T> ApiResponse<T> ok(T data, String message) {
-    return new ApiResponse(CodeEnum.SUCCESS.getCode(), message, data);
+    return new ApiResponse<>(CodeEnum.SUCCESS.getCode(), "", data);
   }
 
   public  static <T> ApiResponse<T> error(String message) {
-    return new ApiResponse(CodeEnum.ERROR.getCode(), message, null);
+    return new ApiResponse<>(CodeEnum.ERROR.getCode(), message, null);
   }
 }
