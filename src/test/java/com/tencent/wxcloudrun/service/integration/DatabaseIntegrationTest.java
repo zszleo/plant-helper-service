@@ -4,13 +4,13 @@ import com.tencent.wxcloudrun.dao.PlantMapper;
 import com.tencent.wxcloudrun.model.Plant;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+import javax.annotation.Resource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
