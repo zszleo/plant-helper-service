@@ -1,6 +1,6 @@
 package com.tencent.wxcloudrun.config;
 
-import com.tencent.wxcloudrun.auth.AuthConstant;
+import com.tencent.wxcloudrun.constant.AuthConstant;
 import com.tencent.wxcloudrun.auth.LoginUserArgumentResolver;
 import com.tencent.wxcloudrun.interceptor.AuthInterceptor;
 import org.springframework.context.annotation.Configuration;

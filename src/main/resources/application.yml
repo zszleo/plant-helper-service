@@ -10,7 +10,6 @@ spring:
       prefix: /
 
 mybatis:
-  mapper-locations: classpath*:mapper/*Mapper.xml
   type-aliases-package: com.tencent.wxcloudrun.model
   configuration:
     map-underscore-to-camel-case: true

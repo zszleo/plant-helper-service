@@ -1,6 +1,6 @@
 package com.tencent.wxcloudrun.interceptor;
 
-import com.tencent.wxcloudrun.auth.AuthConstant;
+import com.tencent.wxcloudrun.constant.AuthConstant;
 import com.tencent.wxcloudrun.constant.CodeEnum;
 import com.tencent.wxcloudrun.context.TokenContext;
 import com.tencent.wxcloudrun.dto.resp.ApiResponse;

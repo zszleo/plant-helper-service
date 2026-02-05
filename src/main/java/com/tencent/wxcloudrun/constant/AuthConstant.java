@@ -1,4 +1,4 @@
-package com.tencent.wxcloudrun.auth;
+package com.tencent.wxcloudrun.constant;
 
 /**
  * 认证常量类
