@@ -40,8 +40,8 @@ public class ReminderController {
     public ApiResponse<PageResponse<Reminder>> getRemindersPage(@Valid @RequestBody ReminderPageQueryRequest request,
                                                                 @Parameter(hidden = true) LoginUser loginUser) {
         // 设置用户ID
-        request.setUserId(loginUser.getOpenid());
-        log.info("获取提醒列表, 用户: {}, 页码: {}, 每页大小: {}", loginUser.getOpenid(), request.getPageNum(), request.getPageSize());
+        request.setUserId(loginUser.getUserId());
+        log.info("获取提醒列表, 用户: {}, 页码: {}, 每页大小: {}", loginUser.getUserId(), request.getPageNum(), request.getPageSize());
         PageResponse<Reminder> pageData = reminderService.getRemindersByPage(request);
         return ApiResponse.pageOk(pageData);
     }
@@ -52,8 +52,8 @@ public class ReminderController {
     @PostMapping("/getReminderById")
     public ApiResponse<Reminder> getReminderById(@RequestBody CommonRequest.Id id,
                                                  @Parameter(hidden = true) LoginUser loginUser) {
-        log.info("获取提醒详情, 用户: {}, 提醒ID: {}", loginUser.getOpenid(), id.getId());
-        Reminder reminder = reminderService.getReminderById(id.getId(), loginUser.getOpenid());
+        log.info("获取提醒详情, 用户: {}, 提醒ID: {}", loginUser.getUserId(), id.getId());
+        Reminder reminder = reminderService.getReminderById(id.getId(), loginUser.getUserId());
         if (reminder != null) {
             return ApiResponse.ok(reminder);
         } else {
@@ -67,10 +67,10 @@ public class ReminderController {
     @PostMapping("/createReminder")
     public ApiResponse<Reminder> createReminder(@RequestBody ReminderRequest request,
                                                 @Parameter(hidden = true) LoginUser loginUser) {
-        log.info("创建提醒, 用户: {}, 植物ID: {}, 提醒类型: {}", loginUser.getOpenid(), request.getPlantId(), request.getType());
+        log.info("创建提醒, 用户: {}, 植物ID: {}, 提醒类型: {}", loginUser.getUserId(), request.getPlantId(), request.getType());
 
         // 设置用户ID
-        request.setUserId(loginUser.getOpenid());
+        request.setUserId(loginUser.getUserId());
         Reminder reminder = reminderService.createReminder(request);
         return ApiResponse.ok(reminder);
     }
@@ -81,9 +81,9 @@ public class ReminderController {
     @PostMapping("/update")
     public ApiResponse<Reminder> updateReminder(@RequestBody ReminderRequest request,
                                                 @Parameter(hidden = true) LoginUser loginUser) {
-        log.info("更新提醒, 用户: {}, 提醒ID: {}, 提醒类型: {}", loginUser.getOpenid(), request.getId(), request.getType());
+        log.info("更新提醒, 用户: {}, 提醒ID: {}, 提醒类型: {}", loginUser.getUserId(), request.getId(), request.getType());
         // 设置用户ID
-        request.setUserId(loginUser.getOpenid());
+        request.setUserId(loginUser.getUserId());
         Reminder reminder = reminderService.updateReminder(request.getId(), request);
         if (reminder != null) {
             return ApiResponse.ok(reminder);
@@ -98,8 +98,8 @@ public class ReminderController {
     @PostMapping("/delete")
     public ApiResponse<String> deleteReminder(@RequestBody CommonRequest.Id id,
                                               @Parameter(hidden = true) LoginUser loginUser) {
-        log.info("删除提醒, 用户: {}, 提醒ID: {}", loginUser.getOpenid(), id.getId());
-        boolean success = reminderService.deleteReminder(id.getId(), loginUser.getOpenid());
+        log.info("删除提醒, 用户: {}, 提醒ID: {}", loginUser.getUserId(), id.getId());
+        boolean success = reminderService.deleteReminder(id.getId(), loginUser.getUserId());
         if (success) {
             return ApiResponse.ok("删除成功");
         } else {
@@ -113,10 +113,10 @@ public class ReminderController {
     @PostMapping("/isEnabled")
     public ApiResponse<Reminder> isEnabled(@RequestBody CommonRequest.IsEnabled enabled,
                                            @Parameter(hidden = true) LoginUser loginUser) {
-        log.info("切换提醒状态, 用户: {}, 提醒ID: {}, 启用状态: {}", loginUser.getOpenid(), enabled.getId(), enabled.getIsEnabled());
+        log.info("切换提醒状态, 用户: {}, 提醒ID: {}, 启用状态: {}", loginUser.getUserId(), enabled.getId(), enabled.getIsEnabled());
         Reminder reminder = reminderService.toggleReminder(enabled.getId(),
                 YesOrNoEnum.YES.getCode().equals(enabled.getIsEnabled()),
-                loginUser.getOpenid());
+                loginUser.getUserId());
         if (reminder != null) {
             return ApiResponse.ok(reminder);
         } else {

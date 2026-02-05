@@ -39,8 +39,8 @@ public class RecordController {
     public ApiResponse<PageResponse<Record>> getRecordsPage(@Valid @RequestBody RecordPageQueryRequest request,
                                                             @Parameter(hidden = true) LoginUser loginUser) {
         // 设置用户ID
-        request.setUserId(loginUser.getOpenid());
-        log.info("获取记录列表, 用户: {}, 页码: {}, 每页大小: {}", loginUser.getOpenid(), request.getPageNum(), request.getPageSize());
+        request.setUserId(loginUser.getUserId());
+        log.info("获取记录列表, 用户: {}, 页码: {}, 每页大小: {}", loginUser.getUserId(), request.getPageNum(), request.getPageSize());
         PageResponse<Record> pageData = recordService.getRecordsByPage(request);
         return ApiResponse.pageOk(pageData);
     }
@@ -51,9 +51,9 @@ public class RecordController {
     @PostMapping("/getRecordById")
     public ApiResponse<Record> getRecordById(@RequestBody CommonRequest.Id id,
                                              @Parameter(hidden = true) LoginUser loginUser) {
-        log.info("获取记录详情, 用户: {}, 记录ID: {}", loginUser.getOpenid(), id.getId());
+        log.info("获取记录详情, 用户: {}, 记录ID: {}", loginUser.getUserId(), id.getId());
 
-        Record record = recordService.getRecordById(id.getId(), loginUser.getOpenid());
+        Record record = recordService.getRecordById(id.getId(), loginUser.getUserId());
         if (record != null) {
             return ApiResponse.ok(record);
         } else {
@@ -67,10 +67,10 @@ public class RecordController {
     @PostMapping("/createRecord")
     public ApiResponse<Record> createRecord(@RequestBody RecordRequest request,
                                             @Parameter(hidden = true) LoginUser loginUser) {
-        log.info("创建记录, 用户: {}, 植物ID: {}, 记录类型: {}", loginUser.getOpenid(), request.getPlantId(), request.getType());
+        log.info("创建记录, 用户: {}, 植物ID: {}, 记录类型: {}", loginUser.getUserId(), request.getPlantId(), request.getType());
 
         // 设置用户ID
-        request.setUserId(loginUser.getOpenid());
+        request.setUserId(loginUser.getUserId());
         Record record = recordService.createRecord(request);
         return ApiResponse.ok(record);
     }
@@ -81,9 +81,9 @@ public class RecordController {
     @PostMapping("/update")
     public ApiResponse<Record> updateRecord(@RequestBody RecordRequest request,
                                             @Parameter(hidden = true) LoginUser loginUser) {
-        log.info("更新记录, 用户: {}, 记录ID: {}, 记录类型: {}", loginUser.getOpenid(), request.getId(), request.getType());
+        log.info("更新记录, 用户: {}, 记录ID: {}, 记录类型: {}", loginUser.getUserId(), request.getId(), request.getType());
         // 设置用户ID
-        request.setUserId(loginUser.getOpenid());
+        request.setUserId(loginUser.getUserId());
         Record record = recordService.updateRecord(request.getId(), request);
         if (record != null) {
             return ApiResponse.ok(record);
@@ -98,8 +98,8 @@ public class RecordController {
     @PostMapping("/delete")
     public ApiResponse<String> deleteRecord(@RequestBody CommonRequest.Id id,
                                             @Parameter(hidden = true) LoginUser loginUser) {
-        log.info("删除记录, 用户: {}, 记录ID: {}", loginUser.getOpenid(), id.getId());
-        boolean success = recordService.deleteRecord(id.getId(), loginUser.getOpenid());
+        log.info("删除记录, 用户: {}, 记录ID: {}", loginUser.getUserId(), id.getId());
+        boolean success = recordService.deleteRecord(id.getId(), loginUser.getUserId());
         if (success) {
             return ApiResponse.ok("删除成功");
         } else {

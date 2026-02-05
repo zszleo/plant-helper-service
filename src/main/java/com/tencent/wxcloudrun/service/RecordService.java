@@ -19,7 +19,7 @@ public interface RecordService {
     /**
      * 根据ID获取记录详情（需要验证用户权限）
      */
-    Record getRecordById(Long id, String userId);
+    Record getRecordById(Long id, Long userId);
 
     /**
      * 创建新记录
@@ -34,5 +34,5 @@ public interface RecordService {
     /**
      * 删除记录（需要验证用户权限）
      */
-    boolean deleteRecord(Long id, String userId);
+    boolean deleteRecord(Long id, Long userId);
 }

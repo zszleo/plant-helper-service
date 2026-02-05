@@ -29,7 +29,7 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public PageResponse<Record> getRecordsByPage(RecordPageQueryRequest request) {
-        String userId = request.getUserId();
+        Long userId = request.getUserId();
         Long plantId = request.getPlantId();
 
         if (plantId != null) {
@@ -58,7 +58,7 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public Record getRecordById(Long id, String userId) {
+    public Record getRecordById(Long id, Long userId) {
         return recordMapper.findByIdAndUserId(id, userId);
     }
 
@@ -98,8 +98,8 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public boolean deleteRecord(Long id, String userId) {
-        com.baomidou.mybatisplus.core.conditions.query.QueryWrapper<Record> wrapper = new com.baomidou.mybatisplus.core.conditions.query.QueryWrapper<>();
+    public boolean deleteRecord(Long id, Long userId) {
+        QueryWrapper<Record> wrapper = new QueryWrapper<>();
         wrapper.eq("id", id).eq("user_id", userId);
         int result = recordMapper.delete(wrapper);
         return result > 0;

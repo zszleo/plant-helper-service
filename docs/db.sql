@@ -8,7 +8,7 @@ DROP TABLE IF EXISTS `users`;
 
 -- 创建用户表（用于数据关联，无需认证）
 CREATE TABLE IF NOT EXISTS `users` (
-                                       `id` bigint NOT NULL AUTO_INCREMENT,
+    `id` bigint NOT NULL,
     `openid` varchar(64) DEFAULT NULL COMMENT '微信openid',
     `nickname` varchar(100) DEFAULT NULL COMMENT '用户昵称',
     `avatar_url` varchar(500) DEFAULT NULL COMMENT '头像URL',
@@ -20,8 +20,8 @@ CREATE TABLE IF NOT EXISTS `users` (
 
 -- 创建植物表
 CREATE TABLE IF NOT EXISTS `plants` (
-                                         `id` bigint NOT NULL AUTO_INCREMENT,
-    `user_id` varchar(64) NOT NULL COMMENT '用户ID',
+    `id` bigint NOT NULL,
+    `user_id` bigint NOT NULL COMMENT '用户ID',
     `name` varchar(100) NOT NULL COMMENT '植物名称',
     `type` varchar(50) NOT NULL COMMENT '植物类型',
     `description` text COMMENT '描述信息',
@@ -42,8 +42,8 @@ CREATE TABLE IF NOT EXISTS `plants` (
 
 -- 创建生长记录表
 CREATE TABLE IF NOT EXISTS `records` (
-                                          `id` bigint NOT NULL AUTO_INCREMENT,
-    `user_id` varchar(64) NOT NULL COMMENT '用户ID',
+    `id` bigint NOT NULL,
+    `user_id` bigint NOT NULL COMMENT '用户ID',
     `plant_id` bigint NOT NULL COMMENT '关联植物ID',
     `type` varchar(20) NOT NULL COMMENT '记录类型：watering/fertilizing/growth/photo',
     `record_time` datetime NOT NULL COMMENT '记录时间',
@@ -59,8 +59,8 @@ CREATE TABLE IF NOT EXISTS `records` (
 
 -- 创建提醒表
 CREATE TABLE IF NOT EXISTS `reminders` (
-                                            `id` bigint NOT NULL AUTO_INCREMENT,
-    `user_id` varchar(64) NOT NULL COMMENT '用户ID',
+    `id` bigint NOT NULL,
+    `user_id` bigint NOT NULL COMMENT '用户ID',
     `plant_id` bigint NOT NULL COMMENT '关联植物ID',
     `type` varchar(20) NOT NULL COMMENT '提醒类型：watering/fertilizing/custom',
     `custom_type` varchar(50) DEFAULT NULL COMMENT '自定义类型名称',
@@ -77,16 +77,3 @@ CREATE TABLE IF NOT EXISTS `reminders` (
     KEY `idx_is_enabled` (`is_enabled`),
     KEY `idx_next_remind_time` (`next_remind_time`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='提醒信息表';
-
--- 插入测试数据（可选）
-INSERT IGNORE INTO `users` (`id`, `openid`, `nickname`, `avatar_url`) VALUES 
-(1, 'test_user_001', '测试用户', 'https://example.com/avatar.jpg');
-
-INSERT IGNORE INTO `plants` (`id`, `user_id`, `name`, `type`, `description`, `plant_date`, `status`) VALUES 
-(1, 'test_user_001', '多肉植物', 'succulent', '耐旱植物，适合室内养殖', NOW(), 'healthy');
-
-INSERT IGNORE INTO `records` (`id`, `user_id`, `plant_id`, `type`, `record_time`, `notes`) VALUES 
-(1, 'test_user_001', 1, 'watering', NOW(), '第一次浇水');
-
-INSERT IGNORE INTO `reminders` (`id`, `user_id`, `plant_id`, `type`, `time`, `frequency`, `frequency_type`, `next_remind_time`) VALUES 
-(1, 'test_user_001', 1, 'watering', '09:00', 7, 'weekly', DATE_ADD(NOW(), INTERVAL 7 DAY));

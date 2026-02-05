@@ -19,7 +19,7 @@ public interface PlantService {
     /**
      * 根据ID获取植物详情（需要验证用户权限）
      */
-    Plant getPlantById(Long id, String userId);
+    Plant getPlantById(Long id, Long userId);
 
     /**
      * 创建新植物
@@ -34,5 +34,5 @@ public interface PlantService {
     /**
      * 删除植物（需要验证用户权限）
      */
-    boolean deletePlant(Long id, String userId);
+    boolean deletePlant(Long id, Long userId);
 }

@@ -41,7 +41,7 @@ public class PlantServiceImpl implements PlantService {
     }
 
     @Override
-    public Plant getPlantById(Long id, String userId) {
+    public Plant getPlantById(Long id, Long userId) {
         return plantMapper.findByIdAndUserId(id, userId);
     }
 
@@ -87,8 +87,8 @@ public class PlantServiceImpl implements PlantService {
     }
 
     @Override
-    public boolean deletePlant(Long id, String userId) {
-        com.baomidou.mybatisplus.core.conditions.query.QueryWrapper<Plant> wrapper = new com.baomidou.mybatisplus.core.conditions.query.QueryWrapper<>();
+    public boolean deletePlant(Long id, Long userId) {
+        QueryWrapper<Plant> wrapper = new QueryWrapper<>();
         wrapper.eq("id", id).eq("user_id", userId);
         int result = plantMapper.delete(wrapper);
         return result > 0;

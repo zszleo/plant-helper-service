@@ -30,7 +30,7 @@ public class ReminderServiceImpl implements ReminderService {
 
     @Override
     public PageResponse<Reminder> getRemindersByPage(ReminderPageQueryRequest request) {
-        String userId = request.getUserId();
+        Long userId = request.getUserId();
         Long plantId = request.getPlantId();
 
         if (plantId != null) {
@@ -59,7 +59,7 @@ public class ReminderServiceImpl implements ReminderService {
     }
 
     @Override
-    public Reminder getReminderById(Long id, String userId) {
+    public Reminder getReminderById(Long id, Long userId) {
         return reminderMapper.findByIdAndUserId(id, userId);
     }
 
@@ -105,15 +105,15 @@ public class ReminderServiceImpl implements ReminderService {
     }
 
     @Override
-    public boolean deleteReminder(Long id, String userId) {
-        com.baomidou.mybatisplus.core.conditions.query.QueryWrapper<Reminder> wrapper = new com.baomidou.mybatisplus.core.conditions.query.QueryWrapper<>();
+    public boolean deleteReminder(Long id, Long userId) {
+        QueryWrapper<Reminder> wrapper = new QueryWrapper<>();
         wrapper.eq("id", id).eq("user_id", userId);
         int result = reminderMapper.delete(wrapper);
         return result > 0;
     }
 
     @Override
-    public Reminder toggleReminder(Long id, Boolean enabled, String userId) {
+    public Reminder toggleReminder(Long id, Boolean enabled, Long userId) {
         int result = reminderMapper.toggleEnabled(id, userId, enabled);
         if (result > 0) {
             return reminderMapper.findByIdAndUserId(id, userId);

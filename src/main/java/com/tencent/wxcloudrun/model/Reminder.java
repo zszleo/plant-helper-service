@@ -18,7 +18,7 @@ public class Reminder {
     private Long id;
     
     /** 用户ID */
-    private String userId;
+    private Long userId;
     
     /** 关联植物ID */
     private Long plantId;

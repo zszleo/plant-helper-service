@@ -17,11 +17,11 @@ public interface PlantMapper extends BaseMapper<Plant> {
      * 根据用户ID查询植物列表
      */
     @Select("SELECT * FROM plants WHERE user_id = #{userId} ORDER BY create_time DESC")
-    List<Plant> findByUserId(@Param("userId") String userId);
+    List<Plant> findByUserId(@Param("userId") Long userId);
 
     /**
      * 根据ID和用户ID查询植物（用于权限验证）
      */
     @Select("SELECT * FROM plants WHERE id = #{id} AND user_id = #{userId}")
-    Plant findByIdAndUserId(@Param("id") Long id, @Param("userId") String userId);
+    Plant findByIdAndUserId(@Param("id") Long id, @Param("userId") Long userId);
 }

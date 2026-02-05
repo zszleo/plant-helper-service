@@ -1,5 +1,6 @@
 package com.tencent.wxcloudrun.dto.req;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.Data;
 import javax.validation.constraints.Min;
 
@@ -17,5 +18,6 @@ public class PageQueryRequest {
     @Min(value = 1, message = "每页条数必须大于0")
     private Integer pageSize = 10;
 
-    private String userId;
+    @Hidden()
+    private Long userId;
 }

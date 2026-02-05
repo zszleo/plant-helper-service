@@ -14,7 +14,7 @@ public class ReminderRequest {
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long id;
     /** 用户ID */
-    private String userId;
+    private Long userId;
     
     /** 关联植物ID */
     @JsonFormat(shape = JsonFormat.Shape.STRING)

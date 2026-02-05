@@ -19,7 +19,7 @@ public interface ReminderService {
     /**
      * 根据ID获取提醒详情（需要验证用户权限）
      */
-    Reminder getReminderById(Long id, String userId);
+    Reminder getReminderById(Long id, Long userId);
 
     /**
      * 创建新提醒
@@ -34,10 +34,10 @@ public interface ReminderService {
     /**
      * 删除提醒（需要验证用户权限）
      */
-    boolean deleteReminder(Long id, String userId);
+    boolean deleteReminder(Long id, Long userId);
 
     /**
      * 启用/禁用提醒（需要验证用户权限）
      */
-    Reminder toggleReminder(Long id, Boolean enabled, String userId);
+    Reminder toggleReminder(Long id, Boolean enabled, Long userId);
 }

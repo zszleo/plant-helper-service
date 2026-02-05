@@ -15,7 +15,7 @@ public class PlantRequest {
     private Long id;
 
     /** 用户ID */
-    private String userId;
+    private Long userId;
     
     /** 植物名称 */
     private String name;

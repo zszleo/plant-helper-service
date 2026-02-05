@@ -38,8 +38,8 @@ public class PlantController {
     @PostMapping("/page")
     public ApiResponse<PageResponse<Plant>> getPlantsPage(@Valid @RequestBody PageQueryRequest request,
                                                           @Parameter(hidden = true) LoginUser loginUser) {
-        log.info("获取植物列表, 用户: {}, 页码: {}, 每页大小: {}", loginUser.getOpenid(), request.getPageNum(), request.getPageSize());
-        request.setUserId(loginUser.getOpenid());
+        log.info("获取植物列表, 用户: {}, 页码: {}, 每页大小: {}", loginUser.getUserId(), request.getPageNum(), request.getPageSize());
+        request.setUserId(loginUser.getUserId());
         PageResponse<Plant> pageData = plantService.getPlantsByUserId(request);
         return ApiResponse.pageOk(pageData);
     }
@@ -50,8 +50,8 @@ public class PlantController {
     @PostMapping("/getPlantById")
     public ApiResponse<Plant> getPlantById(@RequestBody CommonRequest.Id id,
                                            @Parameter(hidden = true) LoginUser loginUser) {
-        log.info("获取植物详情, 用户: {}, 植物ID: {}", loginUser.getOpenid(), id.getId());
-        Plant plant = plantService.getPlantById(id.getId(), loginUser.getOpenid());
+        log.info("获取植物详情, 用户: {}, 植物ID: {}", loginUser.getUserId(), id.getId());
+        Plant plant = plantService.getPlantById(id.getId(), loginUser.getUserId());
         if (plant != null) {
             return ApiResponse.ok(plant);
         } else {
@@ -66,8 +66,8 @@ public class PlantController {
     public ApiResponse<Plant> createPlant(@RequestBody PlantRequest request,
                                           @Parameter(hidden = true) LoginUser loginUser) {
         // 设置用户ID
-        request.setUserId(loginUser.getOpenid());
-        log.info("创建植物, 用户: {}, 植物名称: {}", loginUser.getOpenid(), request.getName());
+        request.setUserId(loginUser.getUserId());
+        log.info("创建植物, 用户: {}, 植物名称: {}", loginUser.getUserId(), request.getName());
         Plant plant = plantService.createPlant(request);
         return ApiResponse.ok(plant);
     }
@@ -79,8 +79,8 @@ public class PlantController {
     public ApiResponse<Plant> updatePlant(@RequestBody PlantRequest request,
                                           @Parameter(hidden = true) LoginUser loginUser) {
         // 设置用户ID
-        request.setUserId(loginUser.getOpenid());
-        log.info("更新植物, 用户: {}, 植物ID: {}, 植物名称: {}", loginUser.getOpenid(), request.getId(), request.getName());
+        request.setUserId(loginUser.getUserId());
+        log.info("更新植物, 用户: {}, 植物ID: {}, 植物名称: {}", loginUser.getUserId(), request.getId(), request.getName());
         Plant plant = plantService.updatePlant(request.getId(), request);
         if (plant != null) {
             return ApiResponse.ok(plant);
@@ -95,8 +95,8 @@ public class PlantController {
     @PostMapping("/delete")
     public ApiResponse<String> deletePlant(@RequestBody CommonRequest.Id id,
                                            @Parameter(hidden = true) LoginUser loginUser) {
-        log.info("删除植物, 用户: {}, 植物ID: {}", loginUser.getOpenid(), id.getId());
-        boolean success = plantService.deletePlant(id.getId(), loginUser.getOpenid());
+        log.info("删除植物, 用户: {}, 植物ID: {}", loginUser.getUserId(), id.getId());
+        boolean success = plantService.deletePlant(id.getId(), loginUser.getUserId());
         if (success) {
             return ApiResponse.ok("删除成功");
         } else {
