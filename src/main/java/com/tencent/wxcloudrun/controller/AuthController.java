@@ -1,6 +1,6 @@
 package com.tencent.wxcloudrun.controller;
 
-import com.tencent.wxcloudrun.context.TokenContext;
+import com.tencent.wxcloudrun.auth.LoginUser;
 import com.tencent.wxcloudrun.dto.req.LoginRequest;
 import com.tencent.wxcloudrun.dto.req.ProfileRequest;
 import com.tencent.wxcloudrun.dto.resp.ApiResponse;
@@ -13,11 +13,18 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.validation.Valid;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
 /**
  * 认证控制器
  *
  * @author zszleon
  */
+@Tag(name = "认证管理", description = "用户登录、资料管理、退出登录等接口")
 @Slf4j
 @RestController
 @RequestMapping("/api/auth")
@@ -26,58 +33,50 @@ public class AuthController {
     @Resource
     private AuthService authService;
 
-    @Resource
-    private TokenContext tokenContext;
-
     /**
      * 微信登录
      */
+    @Operation(summary = "微信登录", description = "通过微信code获取用户openid并生成登录token")
     @PostMapping("/login")
     public ApiResponse<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
+        log.info("用户请求登录, code: {}", request.getCode());
         LoginResponse loginResponse = authService.login(request);
-        log.info("用户登录成功, openid: {}", loginResponse.getUserId());
+
         return ApiResponse.ok(loginResponse);
     }
 
     /**
      * 更新用户信息
      */
+    @Operation(summary = "更新用户资料", description = "更新用户昵称和头像等信息，需要Token认证")
+    @SecurityRequirement(name = "TokenAuth")
     @PostMapping("/updateProfile")
-    public ApiResponse<ProfileResponse> updateProfile(@RequestHeader("X-Token") String token,
-                                                      @Valid @RequestBody ProfileRequest request) {
-        TokenContext.TokenInfo tokenInfo = tokenContext.validateToken(token);
-        if (tokenInfo == null) {
-            return ApiResponse.error("登录已过期，请重新登录");
-        }
-        log.info("用户更新资料, openid: {}", tokenInfo.getOpenid());
-        return ApiResponse.ok(authService.updateProfile(tokenInfo.getOpenid(), request));
+    public ApiResponse<ProfileResponse> updateProfile(@Valid @RequestBody ProfileRequest request,
+                                                      @Parameter(hidden = true) LoginUser loginUser) {
+        log.info("用户更新资料, openid: {}", loginUser.getOpenid());
+        return ApiResponse.ok(authService.updateProfile(loginUser.getOpenid(), request));
     }
 
     /**
      * 获取用户信息
      */
+    @Operation(summary = "获取用户资料", description = "获取当前登录用户的资料信息，需要Token认证")
+    @SecurityRequirement(name = "TokenAuth")
     @PostMapping("/getProfile")
-    public ApiResponse<ProfileResponse> getProfile(@RequestHeader("X-Token") String token) {
-        TokenContext.TokenInfo tokenInfo = tokenContext.validateToken(token);
-        if (tokenInfo == null) {
-            log.warn("获取用户信息失败, token: {}", token);
-            return ApiResponse.error("登录已过期，请重新登录");
-        }
-        log.info("获取用户信息, openid: {}", tokenInfo.getOpenid());
-        return ApiResponse.ok(authService.getProfile(tokenInfo.getOpenid()));
+    public ApiResponse<ProfileResponse> getProfile(@Parameter(hidden = true) LoginUser loginUser) {
+        log.info("获取用户信息, openid: {}", loginUser.getOpenid());
+        return ApiResponse.ok(authService.getProfile(loginUser.getOpenid()));
     }
 
     /**
      * 退出登录
      */
+    @Operation(summary = "退出登录", description = "清除当前用户的登录Token，需要Token认证")
+    @SecurityRequirement(name = "TokenAuth")
     @PostMapping("/logout")
-    public ApiResponse<String> logout(@RequestHeader("X-Token") String token) {
-        TokenContext.TokenInfo tokenInfo = tokenContext.validateToken(token);
-        if (tokenInfo == null) {
-            return ApiResponse.ok("退出成功");
-        }
-        authService.logout(tokenInfo.getOpenid());
-        log.info("用户退出登录, openid: {}", tokenInfo.getOpenid());
+    public ApiResponse<String> logout(@Parameter(hidden = true) LoginUser loginUser) {
+        log.info("用户退出登录, openid: {}", loginUser.getOpenid());
+        authService.logout(loginUser.getOpenid());
         return ApiResponse.ok("退出成功");
     }
 }

@@ -12,6 +12,7 @@ import com.tencent.wxcloudrun.dto.resp.LoginResponse;
 import com.tencent.wxcloudrun.dto.resp.ProfileResponse;
 import com.tencent.wxcloudrun.model.User;
 import com.tencent.wxcloudrun.service.AuthService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -35,6 +36,8 @@ public class AuthServiceImpl implements AuthService {
 
     @Resource
     private TokenContext tokenContext;
+    @Value("${spring.profiles.active:dev}")
+    private static String env;
 
     @Override
     public LoginResponse login(LoginRequest request) {
@@ -58,7 +61,7 @@ public class AuthServiceImpl implements AuthService {
 
         String token = tokenContext.createToken(openid, user.getId());
 
-        return new LoginResponse(token,openid,isNewUser);
+        return new LoginResponse(token,isNewUser);
     }
 
     @Override
@@ -96,6 +99,12 @@ public class AuthServiceImpl implements AuthService {
     }
 
     private Map<String, String> getSessionInfo(String code) {
+        if (!"dev".equals(env)) {
+            Map<String, String> sessionInfo = new HashMap<>();
+            sessionInfo.put("openid", "testUser");
+            sessionInfo.put("session_key", "nnasdjfasdmfafsdfas");
+            return sessionInfo;
+        }
         String url = String.format("%s?appid=%s&secret=%s&js_code=%s&grant_type=authorization_code",
                 JSCODE2SESSION_URL, wxConfig.getAppid(), wxConfig.getSecret(), code);
 

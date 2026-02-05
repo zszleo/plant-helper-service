@@ -1,5 +1,6 @@
 package com.tencent.wxcloudrun.dto.req;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import java.time.LocalDateTime;
 
@@ -9,10 +10,14 @@ import java.time.LocalDateTime;
  */
 @Data
 public class ReminderRequest {
+    /** 提醒ID */
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    private Long id;
     /** 用户ID */
     private String userId;
     
     /** 关联植物ID */
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long plantId;
     
     /** 提醒类型：watering/fertilizing/custom */

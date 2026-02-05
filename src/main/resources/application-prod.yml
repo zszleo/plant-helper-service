@@ -36,3 +36,19 @@ logging:
 wx:
   appid: ${WX_APPID}
   secret: ${WX_SECRET}
+
+# SpringDoc OpenAPI Configuration
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+    enabled: false
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: false
+    operations-sorter: method
+    tags-sorter: alpha
+    display-request-duration: false
+  packages-to-scan: com.tencent.wxcloudrun.controller
+  paths-to-match: /**
+  default-produces-media-type: application/json
+  default-consumes-media-type: application/json

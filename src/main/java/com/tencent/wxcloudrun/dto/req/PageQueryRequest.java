@@ -2,8 +2,12 @@ package com.tencent.wxcloudrun.dto.req;
 
 import lombok.Data;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
 
+
+/**
+ * 分页查询请求基类
+ * @author zszleon
+ */
 @Data
 public class PageQueryRequest {
 
@@ -13,6 +17,5 @@ public class PageQueryRequest {
     @Min(value = 1, message = "每页条数必须大于0")
     private Integer pageSize = 10;
 
-    @NotBlank(message = "userId不能为空")
     private String userId;
 }
