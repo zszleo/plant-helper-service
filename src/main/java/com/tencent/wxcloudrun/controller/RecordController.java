@@ -35,6 +35,8 @@ public class RecordController {
     /**
      * 获取用户的所有记录（分页）
      */
+    @Operation(summary = "获取记录列表", description = "分页获取当前用户的生长记录列表，需要Token认证")
+    @SecurityRequirement(name = "TokenAuth")
     @PostMapping("/page")
     public ApiResponse<PageResponse<Record>> getRecordsPage(@Valid @RequestBody RecordPageQueryRequest request,
                                                             @Parameter(hidden = true) LoginUser loginUser) {
@@ -48,6 +50,8 @@ public class RecordController {
     /**
      * 根据ID获取记录详情
      */
+    @Operation(summary = "获取记录详情", description = "根据记录ID获取生长记录详细信息，需要Token认证")
+    @SecurityRequirement(name = "TokenAuth")
     @PostMapping("/getRecordById")
     public ApiResponse<Record> getRecordById(@RequestBody CommonRequest.Id id,
                                              @Parameter(hidden = true) LoginUser loginUser) {
@@ -64,6 +68,8 @@ public class RecordController {
     /**
      * 创建新记录
      */
+    @Operation(summary = "创建记录", description = "创建新的生长记录，需要Token认证")
+    @SecurityRequirement(name = "TokenAuth")
     @PostMapping("/createRecord")
     public ApiResponse<Record> createRecord(@RequestBody RecordRequest request,
                                             @Parameter(hidden = true) LoginUser loginUser) {
@@ -78,6 +84,8 @@ public class RecordController {
     /**
      * 更新记录信息
      */
+    @Operation(summary = "更新记录", description = "更新生长记录信息，需要Token认证")
+    @SecurityRequirement(name = "TokenAuth")
     @PostMapping("/update")
     public ApiResponse<Record> updateRecord(@RequestBody RecordRequest request,
                                             @Parameter(hidden = true) LoginUser loginUser) {
@@ -95,6 +103,8 @@ public class RecordController {
     /**
      * 删除记录
      */
+    @Operation(summary = "删除记录", description = "删除指定生长记录，需要Token认证")
+    @SecurityRequirement(name = "TokenAuth")
     @PostMapping("/delete")
     public ApiResponse<String> deleteRecord(@RequestBody CommonRequest.Id id,
                                             @Parameter(hidden = true) LoginUser loginUser) {

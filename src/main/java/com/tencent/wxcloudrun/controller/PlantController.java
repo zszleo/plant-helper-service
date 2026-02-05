@@ -35,6 +35,8 @@ public class PlantController {
     /**
      * 获取用户的所有植物（分页）
      */
+    @Operation(summary = "获取植物列表", description = "分页获取当前用户的植物列表，需要Token认证")
+    @SecurityRequirement(name = "TokenAuth")
     @PostMapping("/page")
     public ApiResponse<PageResponse<Plant>> getPlantsPage(@Valid @RequestBody PageQueryRequest request,
                                                           @Parameter(hidden = true) LoginUser loginUser) {
@@ -47,6 +49,8 @@ public class PlantController {
     /**
      * 根据ID获取植物详情
      */
+    @Operation(summary = "获取植物详情", description = "根据植物ID获取植物详细信息，需要Token认证")
+    @SecurityRequirement(name = "TokenAuth")
     @PostMapping("/getPlantById")
     public ApiResponse<Plant> getPlantById(@RequestBody CommonRequest.Id id,
                                            @Parameter(hidden = true) LoginUser loginUser) {
@@ -62,6 +66,8 @@ public class PlantController {
     /**
      * 创建新植物
      */
+    @Operation(summary = "创建植物", description = "创建新的植物信息，需要Token认证")
+    @SecurityRequirement(name = "TokenAuth")
     @PostMapping("/createPlant")
     public ApiResponse<Plant> createPlant(@RequestBody PlantRequest request,
                                           @Parameter(hidden = true) LoginUser loginUser) {
@@ -75,6 +81,8 @@ public class PlantController {
     /**
      * 更新植物信息
      */
+    @Operation(summary = "更新植物", description = "更新植物信息，需要Token认证")
+    @SecurityRequirement(name = "TokenAuth")
     @PostMapping("/update")
     public ApiResponse<Plant> updatePlant(@RequestBody PlantRequest request,
                                           @Parameter(hidden = true) LoginUser loginUser) {
@@ -92,6 +100,8 @@ public class PlantController {
     /**
      * 删除植物
      */
+    @Operation(summary = "删除植物", description = "删除指定植物，需要Token认证")
+    @SecurityRequirement(name = "TokenAuth")
     @PostMapping("/delete")
     public ApiResponse<String> deletePlant(@RequestBody CommonRequest.Id id,
                                            @Parameter(hidden = true) LoginUser loginUser) {

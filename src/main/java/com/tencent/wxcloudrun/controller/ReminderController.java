@@ -36,6 +36,8 @@ public class ReminderController {
     /**
      * 获取用户的所有提醒（分页）
      */
+    @Operation(summary = "获取提醒列表", description = "分页获取当前用户的提醒列表，需要Token认证")
+    @SecurityRequirement(name = "TokenAuth")
     @PostMapping("/page")
     public ApiResponse<PageResponse<Reminder>> getRemindersPage(@Valid @RequestBody ReminderPageQueryRequest request,
                                                                 @Parameter(hidden = true) LoginUser loginUser) {
@@ -49,6 +51,8 @@ public class ReminderController {
     /**
      * 根据ID获取提醒详情
      */
+    @Operation(summary = "获取提醒详情", description = "根据提醒ID获取提醒详细信息，需要Token认证")
+    @SecurityRequirement(name = "TokenAuth")
     @PostMapping("/getReminderById")
     public ApiResponse<Reminder> getReminderById(@RequestBody CommonRequest.Id id,
                                                  @Parameter(hidden = true) LoginUser loginUser) {
@@ -64,6 +68,8 @@ public class ReminderController {
     /**
      * 创建新提醒
      */
+    @Operation(summary = "创建提醒", description = "创建新的养护提醒，需要Token认证")
+    @SecurityRequirement(name = "TokenAuth")
     @PostMapping("/createReminder")
     public ApiResponse<Reminder> createReminder(@RequestBody ReminderRequest request,
                                                 @Parameter(hidden = true) LoginUser loginUser) {
@@ -78,6 +84,8 @@ public class ReminderController {
     /**
      * 更新提醒信息
      */
+    @Operation(summary = "更新提醒", description = "更新提醒信息，需要Token认证")
+    @SecurityRequirement(name = "TokenAuth")
     @PostMapping("/update")
     public ApiResponse<Reminder> updateReminder(@RequestBody ReminderRequest request,
                                                 @Parameter(hidden = true) LoginUser loginUser) {
@@ -95,6 +103,8 @@ public class ReminderController {
     /**
      * 删除提醒
      */
+    @Operation(summary = "删除提醒", description = "删除指定提醒，需要Token认证")
+    @SecurityRequirement(name = "TokenAuth")
     @PostMapping("/delete")
     public ApiResponse<String> deleteReminder(@RequestBody CommonRequest.Id id,
                                               @Parameter(hidden = true) LoginUser loginUser) {
@@ -110,6 +120,8 @@ public class ReminderController {
     /**
      * 启用/禁用提醒
      */
+    @Operation(summary = "切换提醒状态", description = "启用或禁用提醒功能，需要Token认证")
+    @SecurityRequirement(name = "TokenAuth")
     @PostMapping("/isEnabled")
     public ApiResponse<Reminder> isEnabled(@RequestBody CommonRequest.IsEnabled enabled,
                                            @Parameter(hidden = true) LoginUser loginUser) {
