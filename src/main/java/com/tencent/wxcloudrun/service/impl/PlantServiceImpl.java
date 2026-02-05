@@ -1,7 +1,7 @@
 package com.tencent.wxcloudrun.service.impl;
 
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tencent.wxcloudrun.dao.PlantMapper;
 import com.tencent.wxcloudrun.dto.req.PageQueryRequest;
 import com.tencent.wxcloudrun.dto.req.PlantRequest;
@@ -25,16 +25,18 @@ public class PlantServiceImpl implements PlantService {
 
     @Override
     public PageResponse<Plant> getPlantsByUserId(PageQueryRequest request) {
-        PageHelper.startPage(request.getPageNum(), request.getPageSize());
-        List<Plant> list = plantMapper.findByUserId(request.getUserId());
-        Page<Plant> page = (Page<Plant>) list;
+        Page<Plant> page = new Page<>(request.getPageNum().longValue(), request.getPageSize().longValue());
+        QueryWrapper<Plant> wrapper = new QueryWrapper<>();
+        wrapper.eq("user_id", request.getUserId())
+               .orderByDesc("create_time");
+        plantMapper.selectPage(page, wrapper);
 
         return PageResponse.<Plant>builder()
-                .list(page.getResult())
+                .list(page.getRecords())
                 .total(page.getTotal())
                 .pageNum(request.getPageNum())
                 .pageSize(request.getPageSize())
-                .totalPages(page.getPages())
+                .totalPages((int) page.getPages())
                 .build();
     }
 

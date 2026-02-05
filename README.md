@@ -357,26 +357,6 @@ POST /api/plants/page
 
 完整SQL脚本见：[docs/db.sql](./docs/db.sql)
 
-## 已识别问题与改进建议
-
-### 存在的问题
-1. **分页插件冲突**：同时使用MyBatis Plus分页插件和PageHelper，可能导致不可预测的分页行为
-2. **字段命名混淆**：业务表中`user_id`字段实际存储微信openid值，与字段名语义不符
-3. **测试代码缺失**：无任何Java单元测试和集成测试（README描述的测试类不存在）
-4. **MyBatis配置优化**：需要优化MyBatis配置，移除不存在的XML映射引用
-5. **代码结构优化**：`LoginUser`类中`userId`字段名应改为`userLongId`以区分数据库ID
-6. **Docker优化**：Dockerfile未配置时区，建议添加`TZ=Asia/Shanghai`
-7. **容器配置**：`container.config.json`中端口配置不匹配（80 vs 实际18080）
-
-## 改进建议
-1. **解决分页插件冲突**：选择MyBatis Plus或PageHelper单一分页方案
-2. **优化字段命名**：将业务表中`user_id`字段重命名为`openid`，实体类同步更新
-3. **补充基础测试**：创建基本的单元测试和集成测试框架
-4. **容器优化**：优化Dockerfile配置，添加时区支持
-5. **缓存策略优化**：实现多级缓存，提升查询性能
-
-
-
 ## License
 
 [MIT](./LICENSE)

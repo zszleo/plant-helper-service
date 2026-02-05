@@ -1,7 +1,7 @@
 package com.tencent.wxcloudrun.service.impl;
 
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tencent.wxcloudrun.dao.PlantMapper;
 import com.tencent.wxcloudrun.dao.RecordMapper;
 import com.tencent.wxcloudrun.dto.req.RecordPageQueryRequest;
@@ -39,21 +39,21 @@ public class RecordServiceImpl implements RecordService {
             }
         }
 
-        PageHelper.startPage(request.getPageNum(), request.getPageSize());
-        List<Record> list;
+        Page<Record> page = new Page<>(request.getPageNum().longValue(), request.getPageSize().longValue());
+        QueryWrapper<Record> wrapper = new QueryWrapper<>();
+        wrapper.eq("user_id", userId);
         if (plantId != null) {
-            list = recordMapper.findByPlantIdAndUserId(plantId, userId);
-        } else {
-            list = recordMapper.findByUserId(userId);
+            wrapper.eq("plant_id", plantId);
         }
-        Page<Record> page = (Page<Record>) list;
+        wrapper.orderByDesc("record_time");
+        recordMapper.selectPage(page, wrapper);
 
         return PageResponse.<Record>builder()
-                .list(page.getResult())
+                .list(page.getRecords())
                 .total(page.getTotal())
                 .pageNum(request.getPageNum())
                 .pageSize(request.getPageSize())
-                .totalPages(page.getPages())
+                .totalPages((int) page.getPages())
                 .build();
     }
 

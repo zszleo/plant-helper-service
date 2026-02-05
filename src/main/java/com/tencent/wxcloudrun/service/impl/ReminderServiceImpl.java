@@ -1,7 +1,7 @@
 package com.tencent.wxcloudrun.service.impl;
 
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tencent.wxcloudrun.dao.PlantMapper;
 import com.tencent.wxcloudrun.dao.ReminderMapper;
 import com.tencent.wxcloudrun.dto.req.ReminderPageQueryRequest;
@@ -40,21 +40,21 @@ public class ReminderServiceImpl implements ReminderService {
             }
         }
 
-        PageHelper.startPage(request.getPageNum(), request.getPageSize());
-        List<Reminder> list;
+        Page<Reminder> page = new Page<>(request.getPageNum().longValue(), request.getPageSize().longValue());
+        QueryWrapper<Reminder> wrapper = new QueryWrapper<>();
+        wrapper.eq("user_id", userId);
         if (plantId != null) {
-            list = reminderMapper.findByPlantIdAndUserId(plantId, userId);
-        } else {
-            list = reminderMapper.findByUserId(userId);
+            wrapper.eq("plant_id", plantId);
         }
-        Page<Reminder> page = (Page<Reminder>) list;
+        wrapper.orderByDesc("create_time");
+        reminderMapper.selectPage(page, wrapper);
 
         return PageResponse.<Reminder>builder()
-                .list(page.getResult())
+                .list(page.getRecords())
                 .total(page.getTotal())
                 .pageNum(request.getPageNum())
                 .pageSize(request.getPageSize())
-                .totalPages(page.getPages())
+                .totalPages((int) page.getPages())
                 .build();
     }
 
