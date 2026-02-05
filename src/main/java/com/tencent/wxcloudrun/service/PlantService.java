@@ -1,9 +1,9 @@
 package com.tencent.wxcloudrun.service;
 
+import com.tencent.wxcloudrun.dto.req.PageQueryRequest;
 import com.tencent.wxcloudrun.dto.req.PlantRequest;
+import com.tencent.wxcloudrun.dto.resp.PageResponse;
 import com.tencent.wxcloudrun.model.Plant;
-
-import java.util.List;
 
 /**
  * 植物管理服务接口
@@ -12,14 +12,14 @@ import java.util.List;
 public interface PlantService {
 
     /**
-     * 根据用户ID获取植物列表
+     * 根据用户ID获取植物列表（分页）
      */
-    List<Plant> getPlantsByUserId(String userId);
+    PageResponse<Plant> getPlantsByUserId(PageQueryRequest request);
 
     /**
      * 根据ID获取植物详情（需要验证用户权限）
      */
-    Plant getPlantById(Integer id, String userId);
+    Plant getPlantById(Long id, String userId);
 
     /**
      * 创建新植物
@@ -29,10 +29,10 @@ public interface PlantService {
     /**
      * 更新植物信息（需要验证用户权限）
      */
-    Plant updatePlant(Integer id, PlantRequest request);
+    Plant updatePlant(Long id, PlantRequest request);
 
     /**
      * 删除植物（需要验证用户权限）
      */
-    boolean deletePlant(Integer id, String userId);
+    boolean deletePlant(Long id, String userId);
 }

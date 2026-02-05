@@ -13,7 +13,7 @@ public class ReminderRequest {
     private String userId;
     
     /** 关联植物ID */
-    private String plantId;
+    private Long plantId;
     
     /** 提醒类型：watering/fertilizing/custom */
     private String type;

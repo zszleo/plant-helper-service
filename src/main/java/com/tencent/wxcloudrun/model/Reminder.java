@@ -1,5 +1,8 @@
 package com.tencent.wxcloudrun.model;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import java.time.LocalDateTime;
 
@@ -8,15 +11,17 @@ import java.time.LocalDateTime;
  * @author zszleon
  */
 @Data
+@TableName("reminders")
 public class Reminder {
     /** 主键ID */
-    private Integer id;
+    @TableId(type = IdType.ASSIGN_ID)
+    private Long id;
     
     /** 用户ID */
     private String userId;
     
     /** 关联植物ID */
-    private String plantId;
+    private Long plantId;
     
     /** 提醒类型：watering/fertilizing/custom */
     private String type;

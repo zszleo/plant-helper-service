@@ -17,3 +17,8 @@ logging:
     org.mybatis: DEBUG
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+# 微信小程序配置
+wx:
+  appid: ${WX_APPID}
+  secret: ${WX_SECRET}

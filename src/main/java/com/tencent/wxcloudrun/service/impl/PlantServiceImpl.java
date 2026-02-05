@@ -1,7 +1,11 @@
 package com.tencent.wxcloudrun.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.tencent.wxcloudrun.dao.PlantMapper;
+import com.tencent.wxcloudrun.dto.req.PageQueryRequest;
 import com.tencent.wxcloudrun.dto.req.PlantRequest;
+import com.tencent.wxcloudrun.dto.resp.PageResponse;
 import com.tencent.wxcloudrun.model.Plant;
 import com.tencent.wxcloudrun.service.PlantService;
 import org.springframework.stereotype.Service;
@@ -20,19 +24,28 @@ public class PlantServiceImpl implements PlantService {
     private PlantMapper plantMapper;
 
     @Override
-    public List<Plant> getPlantsByUserId(String userId) {
-        return plantMapper.findByUserId(userId);
+    public PageResponse<Plant> getPlantsByUserId(PageQueryRequest request) {
+        PageHelper.startPage(request.getPageNum(), request.getPageSize());
+        List<Plant> list = plantMapper.findByUserId(request.getUserId());
+        Page<Plant> page = (Page<Plant>) list;
+
+        return PageResponse.<Plant>builder()
+                .list(page.getResult())
+                .total(page.getTotal())
+                .pageNum(request.getPageNum())
+                .pageSize(request.getPageSize())
+                .totalPages(page.getPages())
+                .build();
     }
 
     @Override
-    public Plant getPlantById(Integer id, String userId) {
+    public Plant getPlantById(Long id, String userId) {
         return plantMapper.findByIdAndUserId(id, userId);
     }
 
     @Override
     public Plant createPlant(PlantRequest request) {
         Plant plant = new Plant();
-        // 设置基本属性
         plant.setUserId(request.getUserId());
         plant.setName(request.getName());
         plant.setType(request.getType());
@@ -44,20 +57,18 @@ public class PlantServiceImpl implements PlantService {
         plant.setFertilizingInterval(request.getFertilizingInterval() != null ? request.getFertilizingInterval() : 30);
         plant.setLastWatering(request.getLastWatering());
         plant.setLastFertilizing(request.getLastFertilizing());
-        
+
         plantMapper.insert(plant);
         return plant;
     }
 
     @Override
-    public Plant updatePlant(Integer id, PlantRequest request) {
-        // 先验证权限
+    public Plant updatePlant(Long id, PlantRequest request) {
         Plant existingPlant = plantMapper.findByIdAndUserId(id, request.getUserId());
         if (existingPlant == null) {
             return null;
         }
-        
-        // 更新属性
+
         existingPlant.setName(request.getName());
         existingPlant.setType(request.getType());
         existingPlant.setDescription(request.getDescription());
@@ -68,14 +79,16 @@ public class PlantServiceImpl implements PlantService {
         existingPlant.setFertilizingInterval(request.getFertilizingInterval());
         existingPlant.setLastWatering(request.getLastWatering());
         existingPlant.setLastFertilizing(request.getLastFertilizing());
-        
-        int result = plantMapper.update(existingPlant);
+
+        int result = plantMapper.updateById(existingPlant);
         return result > 0 ? existingPlant : null;
     }
 
     @Override
-    public boolean deletePlant(Integer id, String userId) {
-        int result = plantMapper.delete(id, userId);
+    public boolean deletePlant(Long id, String userId) {
+        com.baomidou.mybatisplus.core.conditions.query.QueryWrapper<Plant> wrapper = new com.baomidou.mybatisplus.core.conditions.query.QueryWrapper<>();
+        wrapper.eq("id", id).eq("user_id", userId);
+        int result = plantMapper.delete(wrapper);
         return result > 0;
     }
 }

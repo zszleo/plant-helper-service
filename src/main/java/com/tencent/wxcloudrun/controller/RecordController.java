@@ -1,18 +1,23 @@
 package com.tencent.wxcloudrun.controller;
 
+import com.tencent.wxcloudrun.dto.req.CommonRequest;
 import com.tencent.wxcloudrun.dto.resp.ApiResponse;
+import com.tencent.wxcloudrun.dto.resp.PageResponse;
+import com.tencent.wxcloudrun.dto.req.RecordPageQueryRequest;
 import com.tencent.wxcloudrun.dto.req.RecordRequest;
 import com.tencent.wxcloudrun.model.Record;
 import com.tencent.wxcloudrun.service.RecordService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.List;
+import javax.validation.Valid;
 
 /**
  * 生长记录管理控制器
  * @author zszleon
  */
+@Slf4j
 @RestController
 @RequestMapping("/api/records")
 public class RecordController {
@@ -21,102 +26,75 @@ public class RecordController {
     private RecordService recordService;
 
     /**
-     * 获取用户的所有记录
+     * 获取用户的所有记录（分页）
      */
-    @GetMapping
-    public ApiResponse<List<Record>> getRecords(@RequestHeader("X-User-ID") String userId) {
-        try {
-            List<Record> records = recordService.getRecordsByUserId(userId);
-            return ApiResponse.ok(records);
-        } catch (Exception e) {
-            return ApiResponse.error("获取记录列表失败: " + e.getMessage());
-        }
-    }
-
-    /**
-     * 根据植物ID获取记录
-     */
-    @GetMapping("/plant/{plantId}")
-    public ApiResponse<List<Record>> getRecordsByPlantId(@PathVariable Integer plantId,
-                                          @RequestHeader("X-User-ID") String userId) {
-        try {
-            List<Record> records = recordService.getRecordsByPlantId(plantId, userId);
-            return ApiResponse.ok(records);
-        } catch (Exception e) {
-            return ApiResponse.error("获取植物记录失败: " + e.getMessage());
-        }
+    @PostMapping("/page")
+    public ApiResponse<PageResponse<Record>> getRecordsPage(@Valid @RequestBody RecordPageQueryRequest request) {
+        log.info("获取记录列表, 用户: {}, 页码: {}, 每页大小: {}", request.getUserId(), request.getPageNum(), request.getPageSize());
+        PageResponse<Record> pageData = recordService.getRecordsByPage(request);
+        return ApiResponse.pageOk(pageData);
     }
 
     /**
      * 根据ID获取记录详情
      */
-    @GetMapping("/{id}")
-    public ApiResponse<Record> getRecordById(@PathVariable Integer id,
+    @PostMapping("/getRecordById")
+    public ApiResponse<Record> getRecordById(@RequestBody CommonRequest.Id id,
                                     @RequestHeader("X-User-ID") String userId) {
-        try {
-            Record record = recordService.getRecordById(id, userId);
-            if (record != null) {
-                return ApiResponse.ok(record);
-            } else {
-                return ApiResponse.error("记录不存在或无权访问");
-            }
-        } catch (Exception e) {
-            return ApiResponse.error("获取记录详情失败: " + e.getMessage());
+        log.info("获取记录详情, 用户: {}, 记录ID: {}", userId, id.getId());
+
+        Record record = recordService.getRecordById(id.getId(), userId);
+        if (record != null) {
+            return ApiResponse.ok(record);
+        } else {
+            return ApiResponse.error("记录不存在或无权访问");
         }
     }
 
     /**
      * 创建新记录
      */
-    @PostMapping
+    @PostMapping("/createRecord")
     public ApiResponse<Record> createRecord(@RequestBody RecordRequest request,
                                    @RequestHeader("X-User-ID") String userId) {
-        try {
-            // 设置用户ID
-            request.setUserId(userId);
-            Record record = recordService.createRecord(request);
-            return ApiResponse.ok(record);
-        } catch (Exception e) {
-            return ApiResponse.error("创建记录失败: " + e.getMessage());
-        }
+        log.info("创建记录, 用户: {}, 植物ID: {}, 记录类型: {}", userId, request.getPlantId(), request.getType());
+
+        // 设置用户ID
+        request.setUserId(userId);
+        Record record = recordService.createRecord(request);
+        return ApiResponse.ok(record);
     }
 
     /**
      * 更新记录信息
      */
-    @PutMapping("/{id}")
-    public ApiResponse<Record> updateRecord(@PathVariable Integer id,
+    @PostMapping("/update")
+    public ApiResponse<Record> updateRecord(@RequestBody CommonRequest.Id id,
                                    @RequestBody RecordRequest request,
                                    @RequestHeader("X-User-ID") String userId) {
-        try {
-            // 设置用户ID
-            request.setUserId(userId);
-            Record record = recordService.updateRecord(id, request);
-            if (record != null) {
-                return ApiResponse.ok(record);
-            } else {
-                return ApiResponse.error("记录不存在或无权修改");
-            }
-        } catch (Exception e) {
-            return ApiResponse.error("更新记录失败: " + e.getMessage());
+        log.info("更新记录, 用户: {}, 记录ID: {}, 记录类型: {}", userId, id.getId(), request.getType());
+        // 设置用户ID
+        request.setUserId(userId);
+        Record record = recordService.updateRecord(id.getId(), request);
+        if (record != null) {
+            return ApiResponse.ok(record);
+        } else {
+            return ApiResponse.error("记录不存在或无权修改");
         }
     }
 
     /**
      * 删除记录
      */
-    @DeleteMapping("/{id}")
-    public ApiResponse<String> deleteRecord(@PathVariable Integer id,
+    @PostMapping("/delete")
+    public ApiResponse<String> deleteRecord(@RequestBody CommonRequest.Id id,
                                    @RequestHeader("X-User-ID") String userId) {
-        try {
-            boolean success = recordService.deleteRecord(id, userId);
-            if (success) {
-                return ApiResponse.ok("删除成功");
-            } else {
-                return ApiResponse.error("记录不存在或无权删除");
-            }
-        } catch (Exception e) {
-            return ApiResponse.error("删除记录失败: " + e.getMessage());
+        log.info("删除记录, 用户: {}, 记录ID: {}", userId, id.getId());
+        boolean success = recordService.deleteRecord(id.getId(), userId);
+        if (success) {
+            return ApiResponse.ok("删除成功");
+        } else {
+            return ApiResponse.error("记录不存在或无权删除");
         }
     }
 }

@@ -1,8 +1,14 @@
 -- 植物种植助手数据库初始化脚本
 
+-- 删除现有表（如果存在）
+DROP TABLE IF EXISTS `reminders`;
+DROP TABLE IF EXISTS `records`;
+DROP TABLE IF EXISTS `plants`;
+DROP TABLE IF EXISTS `users`;
+
 -- 创建用户表（用于数据关联，无需认证）
 CREATE TABLE IF NOT EXISTS `users` (
-                                       `id` int(11) NOT NULL AUTO_INCREMENT,
+                                       `id` bigint NOT NULL AUTO_INCREMENT,
     `openid` varchar(64) DEFAULT NULL COMMENT '微信openid',
     `nickname` varchar(100) DEFAULT NULL COMMENT '用户昵称',
     `avatar_url` varchar(500) DEFAULT NULL COMMENT '头像URL',
@@ -14,7 +20,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 
 -- 创建植物表
 CREATE TABLE IF NOT EXISTS `plants` (
-                                        `id` int(11) NOT NULL AUTO_INCREMENT,
+                                         `id` bigint NOT NULL AUTO_INCREMENT,
     `user_id` varchar(64) NOT NULL COMMENT '用户ID',
     `name` varchar(100) NOT NULL COMMENT '植物名称',
     `type` varchar(50) NOT NULL COMMENT '植物类型',
@@ -36,9 +42,9 @@ CREATE TABLE IF NOT EXISTS `plants` (
 
 -- 创建生长记录表
 CREATE TABLE IF NOT EXISTS `records` (
-                                         `id` int(11) NOT NULL AUTO_INCREMENT,
+                                          `id` bigint NOT NULL AUTO_INCREMENT,
     `user_id` varchar(64) NOT NULL COMMENT '用户ID',
-    `plant_id` int(11) NOT NULL COMMENT '关联植物ID',
+    `plant_id` bigint NOT NULL COMMENT '关联植物ID',
     `type` varchar(20) NOT NULL COMMENT '记录类型：watering/fertilizing/growth/photo',
     `record_time` datetime NOT NULL COMMENT '记录时间',
     `notes` text COMMENT '备注信息',
@@ -53,9 +59,9 @@ CREATE TABLE IF NOT EXISTS `records` (
 
 -- 创建提醒表
 CREATE TABLE IF NOT EXISTS `reminders` (
-                                           `id` int(11) NOT NULL AUTO_INCREMENT,
+                                            `id` bigint NOT NULL AUTO_INCREMENT,
     `user_id` varchar(64) NOT NULL COMMENT '用户ID',
-    `plant_id` int(11) NOT NULL COMMENT '关联植物ID',
+    `plant_id` bigint NOT NULL COMMENT '关联植物ID',
     `type` varchar(20) NOT NULL COMMENT '提醒类型：watering/fertilizing/custom',
     `custom_type` varchar(50) DEFAULT NULL COMMENT '自定义类型名称',
     `time` varchar(10) NOT NULL COMMENT '提醒时间（HH:mm格式）',

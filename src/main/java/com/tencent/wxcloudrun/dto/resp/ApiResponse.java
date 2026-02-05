@@ -4,7 +4,7 @@ import com.tencent.wxcloudrun.constant.CodeEnum;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.HashMap;
+import com.tencent.wxcloudrun.dto.resp.PageResponse;
 
 /**
  * 统一API响应对象
@@ -37,5 +37,9 @@ public class ApiResponse<T> implements Serializable {
 
   public  static <T> ApiResponse<T> error(String message) {
     return new ApiResponse<>(CodeEnum.ERROR.getCode(), message, null);
+  }
+
+  public static <T> ApiResponse<PageResponse<T>> pageOk(PageResponse<T> data) {
+    return new ApiResponse<>(CodeEnum.SUCCESS.getCode(), "", data);
   }
 }

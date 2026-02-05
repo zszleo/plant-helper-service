@@ -13,7 +13,7 @@ public class RecordRequest {
     private String userId;
     
     /** 关联植物ID */
-    private String plantId;
+    private Long plantId;
     
     /** 记录类型：watering/fertilizing/growth/photo */
     private String type;
