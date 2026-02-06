@@ -1,3 +1,5 @@
+# docker build -f "Dockerfile" -t plant-helper-service:latest .
+
 # 二开推荐阅读[如何提高项目构建效率](https://developers.weixin.qq.com/miniprogram/dev/wxcloudrun/src/scene/build/speed.html)
 # 选择构建用基础镜像。如需更换，请到[dockerhub官方仓库](https://hub.docker.com/_/java?tab=tags)自行选择后替换。
 FROM maven:3.6.0-jdk-8-slim AS build
@@ -43,10 +45,11 @@ EXPOSE 18080
 
 # 设置环境变量，默认使用开发环境
 # 可通过构建参数 ARG 或环境变量 ENV 覆盖
-ENV SPRING_PROFILES_ACTIVE=""
+ENV ACTIVE=""
 
 # 执行启动命令.
 # 写多行独立的CMD命令是错误写法！只有最后一行CMD命令会被执行，之前的都会被忽略，导致业务报错。
 # 请参考[Docker官方文档之CMD命令](https://docs.docker.com/engine/reference/builder/#cmd)
 # CMD ["java", "-jar", "/app/plant-helper-service-1.0.jar"]
-ENTRYPOINT ["java", "-Dspring.profiles.active=${SPRING_PROFILES_ACTIVE}", "-jar", "/app/plant-helper-service-1.0.jar"]
+
+ENTRYPOINT ["java", "-Dspring.profiles.active=${ACTIVE}", "-jar", "/app/plant-helper-service-1.0.jar"]

@@ -5,9 +5,9 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     # 生产环境数据库配置 - 使用环境变量
-    url: jdbc:mysql://${MYSQL_ADDRESS}/${MYSQL_DATABASE:plant_helper}
-    username: ${MYSQL_USERNAME}
-    password: ${MYSQL_PASSWORD}
+    url: jdbc:mysql://host.docker.internal:3306/plant_helper?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: u_plant_helper
+    password: $zshpdMiMa1
     # 生产环境连接池配置
     hikari:
       maximum-pool-size: 20

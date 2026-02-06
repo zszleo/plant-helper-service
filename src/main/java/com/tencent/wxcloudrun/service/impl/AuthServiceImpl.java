@@ -99,7 +99,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
      private Map<String, String> getSessionInfo(String code) {
-         if ("dev".equals(env)) {
+         if (!"prod".equals(env)) {
              Map<String, String> sessionInfo = new HashMap<>();
              sessionInfo.put("openid", "testUser");
              sessionInfo.put("session_key", "nnasdjfasdmfafsdfas");

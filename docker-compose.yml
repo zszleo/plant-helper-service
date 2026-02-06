@@ -1,0 +1,25 @@
+version: '3'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.development
+    volumes:
+      - .:/app
+    ports:
+      - '27081:18080'
+    container_name: wxcloud_plant-helper-service
+    labels:
+      - wxPort=27082
+      - hostPort=27081
+      - wxcloud=plant-helper-service
+      - role=container
+    environment:
+      - MYSQL_USERNAME=
+      - MYSQL_PASSWORD=
+      - MYSQL_ADDRESS=
+      - ACTIVE=test
+networks:
+  default:
+    external:
+      name: wxcb0

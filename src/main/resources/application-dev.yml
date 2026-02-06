@@ -6,7 +6,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     # 连接前确定ip地址 wsl hostname -I
-    url: jdbc:mysql://localhost:3306/plant_helper?allowPublicKeyRetrieval=true
+    url: jdbc:mysql://localhost:3306/plant_helper?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
     username: u_plant_helper
     password: $zshpdMiMa1
 # 开发环境日志配置
