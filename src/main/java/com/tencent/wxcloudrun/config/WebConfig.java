@@ -11,11 +11,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import javax.annotation.Resource;
 import java.util.List;
 
-@Configuration
+
 /**
  * Web配置类
  * @author zszleon
  */
+@Configuration
 public class WebConfig implements WebMvcConfigurer {
     
     @Resource

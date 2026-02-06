@@ -1,6 +1,6 @@
 # 二开推荐阅读[如何提高项目构建效率](https://developers.weixin.qq.com/miniprogram/dev/wxcloudrun/src/scene/build/speed.html)
 # 选择构建用基础镜像。如需更换，请到[dockerhub官方仓库](https://hub.docker.com/_/java?tab=tags)自行选择后替换。
-FROM maven:3.6.0-jdk-8-slim as build
+FROM maven:3.6.0-jdk-8-slim AS build
 
 # 指定构建过程中的工作目录
 WORKDIR /app
@@ -8,7 +8,7 @@ WORKDIR /app
 # 将src目录下所有文件，拷贝到工作目录中src目录下（.gitignore/.dockerignore中文件除外）
 COPY src /app/src
 
-# 将pom.xml文件，拷贝到工作目录下
+# 将pom.xml文件,拷贝到工作目录下
 COPY settings.xml pom.xml /app/
 
 # 执行代码编译命令
@@ -43,9 +43,10 @@ EXPOSE 18080
 
 # 设置环境变量，默认使用开发环境
 # 可通过构建参数 ARG 或环境变量 ENV 覆盖
-ENV SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
+ENV SPRING_PROFILES_ACTIVE=""
 
 # 执行启动命令.
 # 写多行独立的CMD命令是错误写法！只有最后一行CMD命令会被执行，之前的都会被忽略，导致业务报错。
 # 请参考[Docker官方文档之CMD命令](https://docs.docker.com/engine/reference/builder/#cmd)
-CMD ["java", "-jar", "/app/plant-helper-service-1.0.jar"]
+# CMD ["java", "-jar", "/app/plant-helper-service-1.0.jar"]
+ENTRYPOINT ["java", "-Dspring.profiles.active=${SPRING_PROFILES_ACTIVE}", "-jar", "/app/plant-helper-service-1.0.jar"]

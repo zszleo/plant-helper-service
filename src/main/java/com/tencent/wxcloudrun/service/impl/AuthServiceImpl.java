@@ -37,7 +37,7 @@ public class AuthServiceImpl implements AuthService {
     @Resource
     private TokenContext tokenContext;
     @Value("${spring.profiles.active:dev}")
-    private static String env;
+    private String env;
 
     @Override
     public LoginResponse login(LoginRequest request) {
@@ -98,13 +98,13 @@ public class AuthServiceImpl implements AuthService {
         tokenContext.removeTokenByOpenid(openid);
     }
 
-    private Map<String, String> getSessionInfo(String code) {
-        if (!"dev".equals(env)) {
-            Map<String, String> sessionInfo = new HashMap<>();
-            sessionInfo.put("openid", "testUser");
-            sessionInfo.put("session_key", "nnasdjfasdmfafsdfas");
-            return sessionInfo;
-        }
+     private Map<String, String> getSessionInfo(String code) {
+         if ("dev".equals(env)) {
+             Map<String, String> sessionInfo = new HashMap<>();
+             sessionInfo.put("openid", "testUser");
+             sessionInfo.put("session_key", "nnasdjfasdmfafsdfas");
+             return sessionInfo;
+         }
         String url = String.format("%s?appid=%s&secret=%s&js_code=%s&grant_type=authorization_code",
                 JSCODE2SESSION_URL, wxConfig.getAppid(), wxConfig.getSecret(), code);
 
