@@ -7,6 +7,7 @@ import com.tencent.wxcloudrun.dao.ReminderMapper;
 import com.tencent.wxcloudrun.dto.req.ReminderPageQueryRequest;
 import com.tencent.wxcloudrun.dto.req.ReminderRequest;
 import com.tencent.wxcloudrun.dto.resp.PageResponse;
+import com.tencent.wxcloudrun.exception.BusinessException;
 import com.tencent.wxcloudrun.model.Plant;
 import com.tencent.wxcloudrun.model.Reminder;
 import com.tencent.wxcloudrun.service.ReminderService;
@@ -36,7 +37,7 @@ public class ReminderServiceImpl implements ReminderService {
         if (plantId != null) {
             Plant plant = plantMapper.findByIdAndUserId(plantId, userId);
             if (plant == null) {
-                throw new RuntimeException("植物不存在或无权访问");
+                throw new BusinessException("植物不存在或无权访问");
             }
         }
 
@@ -67,7 +68,7 @@ public class ReminderServiceImpl implements ReminderService {
     public Reminder createReminder(ReminderRequest request) {
         Plant plant = plantMapper.findByIdAndUserId(request.getPlantId(), request.getUserId());
         if (plant == null) {
-            throw new RuntimeException("植物不存在或无权访问");
+            throw new BusinessException("植物不存在或无权访问");
         }
 
         Reminder reminder = new Reminder();

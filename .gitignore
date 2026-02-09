@@ -21,6 +21,7 @@ Thumbs.db
 .project
 .settings/
 .externalToolBuilders/
+docker-compose.yml
 
 # 依赖目录
 node_modules/

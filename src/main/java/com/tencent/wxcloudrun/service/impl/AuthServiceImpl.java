@@ -3,6 +3,8 @@ package com.tencent.wxcloudrun.service.impl;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import lombok.extern.slf4j.Slf4j;
+
 import com.tencent.wxcloudrun.config.WxConfig;
 import com.tencent.wxcloudrun.context.TokenContext;
 import com.tencent.wxcloudrun.dao.UserMapper;
@@ -10,6 +12,7 @@ import com.tencent.wxcloudrun.dto.req.LoginRequest;
 import com.tencent.wxcloudrun.dto.req.ProfileRequest;
 import com.tencent.wxcloudrun.dto.resp.LoginResponse;
 import com.tencent.wxcloudrun.dto.resp.ProfileResponse;
+import com.tencent.wxcloudrun.exception.BusinessException;
 import com.tencent.wxcloudrun.model.User;
 import com.tencent.wxcloudrun.service.AuthService;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,10 +26,11 @@ import java.util.Map;
  * 认证服务实现类
  * @author zszleon
  */
+@Slf4j
 @Service
 public class AuthServiceImpl implements AuthService {
 
-    private static final String JSCODE2SESSION_URL = "https://api.weixin.qq.com/sns/jscode2session";
+    private static final String JSCODE2SESSION_URL = "http://api.weixin.qq.com/sns/jscode2session";
 
     @Resource
     private WxConfig wxConfig;
@@ -43,7 +47,7 @@ public class AuthServiceImpl implements AuthService {
     public LoginResponse login(LoginRequest request) {
         Map<String, String> sessionInfo = getSessionInfo(request.getCode());
         if (sessionInfo == null) {
-            throw new RuntimeException("微信登录失败：无法获取用户信息");
+            throw new BusinessException("微信登录失败：无法获取用户信息");
         }
 
         String openid = sessionInfo.get("openid");
@@ -68,7 +72,7 @@ public class AuthServiceImpl implements AuthService {
     public ProfileResponse updateProfile(String openid, ProfileRequest request) {
         User user = userMapper.findByOpenid(openid);
         if (user == null) {
-            throw new RuntimeException("用户不存在");
+            throw new BusinessException("用户不存在");
         }
 
         if (request.getNickname() != null) {
@@ -87,7 +91,7 @@ public class AuthServiceImpl implements AuthService {
     public ProfileResponse getProfile(String openid) {
         User user = userMapper.findByOpenid(openid);
         if (user == null) {
-            throw new RuntimeException("用户不存在");
+            throw new BusinessException("用户不存在");
         }
 
         return new ProfileResponse(openid,user.getOpenid(),user.getNickname(),user.getAvatarUrl(),user.getCreateTime());
@@ -109,9 +113,10 @@ public class AuthServiceImpl implements AuthService {
                 JSCODE2SESSION_URL, wxConfig.getAppid(), wxConfig.getSecret(), code);
 
         try {
+            log.info(url);
             String responseBody = HttpUtil.get(url);
             JSONObject result = JSONUtil.parseObj(responseBody);
-
+            log.info("请求响内容：{}",result.toString());
             if (result.containsKey("errcode") && result.getInt("errcode") != 0) {
                 return null;
             }
@@ -121,6 +126,7 @@ public class AuthServiceImpl implements AuthService {
             sessionInfo.put("session_key", result.getStr("session_key"));
             return sessionInfo;
         } catch (Exception e) {
+            log.error("",e);
             return null;
         }
     }

@@ -7,6 +7,7 @@ import com.tencent.wxcloudrun.dao.RecordMapper;
 import com.tencent.wxcloudrun.dto.req.RecordPageQueryRequest;
 import com.tencent.wxcloudrun.dto.req.RecordRequest;
 import com.tencent.wxcloudrun.dto.resp.PageResponse;
+import com.tencent.wxcloudrun.exception.BusinessException;
 import com.tencent.wxcloudrun.model.Plant;
 import com.tencent.wxcloudrun.model.Record;
 import com.tencent.wxcloudrun.service.RecordService;
@@ -35,7 +36,7 @@ public class RecordServiceImpl implements RecordService {
         if (plantId != null) {
             Plant plant = plantMapper.findByIdAndUserId(plantId, userId);
             if (plant == null) {
-                throw new RuntimeException("植物不存在或无权访问");
+                throw new BusinessException("植物不存在或无权访问");
             }
         }
 
@@ -66,7 +67,7 @@ public class RecordServiceImpl implements RecordService {
     public Record createRecord(RecordRequest request) {
         Plant plant = plantMapper.findByIdAndUserId(request.getPlantId(), request.getUserId());
         if (plant == null) {
-            throw new RuntimeException("植物不存在或无权访问");
+            throw new BusinessException("植物不存在或无权访问");
         }
 
         Record record = new Record();
