@@ -1,11 +1,13 @@
 package com.tencent.wxcloudrun.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tencent.wxcloudrun.dao.PlantMapper;
 import com.tencent.wxcloudrun.dto.req.PageQueryRequest;
 import com.tencent.wxcloudrun.dto.req.PlantRequest;
 import com.tencent.wxcloudrun.dto.resp.PageResponse;
+import com.tencent.wxcloudrun.dto.resp.PlantResponse;
 import com.tencent.wxcloudrun.model.Plant;
 import com.tencent.wxcloudrun.service.PlantService;
 import org.springframework.stereotype.Service;
@@ -24,15 +26,15 @@ public class PlantServiceImpl implements PlantService {
     private PlantMapper plantMapper;
 
     @Override
-    public PageResponse<Plant> getPlantsByUserId(PageQueryRequest request) {
+    public PageResponse<PlantResponse> getPlantsByUserId(PageQueryRequest request) {
         Page<Plant> page = new Page<>(request.getPageNum().longValue(), request.getPageSize().longValue());
         QueryWrapper<Plant> wrapper = new QueryWrapper<>();
         wrapper.eq("user_id", request.getUserId())
                .orderByDesc("create_time");
         plantMapper.selectPage(page, wrapper);
-
-        return PageResponse.<Plant>builder()
-                .list(page.getRecords())
+        List<PlantResponse> plantResponses = BeanUtil.copyToList(page.getRecords(), PlantResponse.class);
+        return PageResponse.<PlantResponse>builder()
+                .list(plantResponses)
                 .total(page.getTotal())
                 .pageNum(request.getPageNum())
                 .pageSize(request.getPageSize())
@@ -41,12 +43,16 @@ public class PlantServiceImpl implements PlantService {
     }
 
     @Override
-    public Plant getPlantById(Long id, Long userId) {
-        return plantMapper.findByIdAndUserId(id, userId);
+    public PlantResponse getPlantById(Long id, Long userId) {
+        Plant plant = plantMapper.findByIdAndUserId(id, userId);
+        if (plant == null) {
+            return null;
+        }
+        return BeanUtil.copyProperties(plant, PlantResponse.class);
     }
 
     @Override
-    public Plant createPlant(PlantRequest request) {
+    public PlantResponse createPlant(PlantRequest request) {
         Plant plant = new Plant();
         plant.setUserId(request.getUserId());
         plant.setName(request.getName());
@@ -61,11 +67,12 @@ public class PlantServiceImpl implements PlantService {
         plant.setLastFertilizing(request.getLastFertilizing());
 
         plantMapper.insert(plant);
-        return plant;
+
+        return BeanUtil.copyProperties(plant, PlantResponse.class);
     }
 
     @Override
-    public Plant updatePlant(Long id, PlantRequest request) {
+    public PlantResponse updatePlant(Long id, PlantRequest request) {
         Plant existingPlant = plantMapper.findByIdAndUserId(id, request.getUserId());
         if (existingPlant == null) {
             return null;
@@ -83,7 +90,7 @@ public class PlantServiceImpl implements PlantService {
         existingPlant.setLastFertilizing(request.getLastFertilizing());
 
         int result = plantMapper.updateById(existingPlant);
-        return result > 0 ? existingPlant : null;
+        return result > 0 ? BeanUtil.copyProperties(existingPlant, PlantResponse.class) : null;
     }
 
     @Override

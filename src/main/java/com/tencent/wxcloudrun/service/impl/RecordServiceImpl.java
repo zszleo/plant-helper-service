@@ -1,5 +1,6 @@
 package com.tencent.wxcloudrun.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tencent.wxcloudrun.dao.PlantMapper;
@@ -7,6 +8,8 @@ import com.tencent.wxcloudrun.dao.RecordMapper;
 import com.tencent.wxcloudrun.dto.req.RecordPageQueryRequest;
 import com.tencent.wxcloudrun.dto.req.RecordRequest;
 import com.tencent.wxcloudrun.dto.resp.PageResponse;
+import com.tencent.wxcloudrun.dto.resp.PlantResponse;
+import com.tencent.wxcloudrun.dto.resp.RecordResponse;
 import com.tencent.wxcloudrun.exception.BusinessException;
 import com.tencent.wxcloudrun.model.Plant;
 import com.tencent.wxcloudrun.model.Record;
@@ -14,7 +17,9 @@ import com.tencent.wxcloudrun.service.RecordService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 生长记录管理服务实现类
@@ -29,7 +34,7 @@ public class RecordServiceImpl implements RecordService {
     private PlantMapper plantMapper;
 
     @Override
-    public PageResponse<Record> getRecordsByPage(RecordPageQueryRequest request) {
+    public PageResponse<RecordResponse> getRecordsByPage(RecordPageQueryRequest request) {
         Long userId = request.getUserId();
         Long plantId = request.getPlantId();
 
@@ -49,8 +54,11 @@ public class RecordServiceImpl implements RecordService {
         wrapper.orderByDesc("record_time");
         recordMapper.selectPage(page, wrapper);
 
-        return PageResponse.<Record>builder()
-                .list(page.getRecords())
+        List<RecordResponse> recordResponses = BeanUtil.copyToList(page.getRecords(), RecordResponse.class);
+
+
+        return PageResponse.<RecordResponse>builder()
+                .list(recordResponses)
                 .total(page.getTotal())
                 .pageNum(request.getPageNum())
                 .pageSize(request.getPageSize())
@@ -59,12 +67,13 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public Record getRecordById(Long id, Long userId) {
-        return recordMapper.findByIdAndUserId(id, userId);
+    public RecordResponse getRecordById(Long id, Long userId) {
+        Record record = recordMapper.findByIdAndUserId(id, userId);
+        return record != null ? BeanUtil.copyProperties(record, RecordResponse.class) : null;
     }
 
     @Override
-    public Record createRecord(RecordRequest request) {
+    public RecordResponse createRecord(RecordRequest request) {
         Plant plant = plantMapper.findByIdAndUserId(request.getPlantId(), request.getUserId());
         if (plant == null) {
             throw new BusinessException("植物不存在或无权访问");
@@ -74,16 +83,16 @@ public class RecordServiceImpl implements RecordService {
         record.setUserId(request.getUserId());
         record.setPlantId(request.getPlantId());
         record.setType(request.getType());
-        record.setRecordTime(request.getRecordTime() != null ? request.getRecordTime() : java.time.LocalDateTime.now());
+        record.setRecordTime(request.getRecordTime() != null ? request.getRecordTime() : new Date());
         record.setNotes(request.getNotes());
         record.setImageUrl(request.getImageUrl());
 
         recordMapper.insert(record);
-        return record;
+        return BeanUtil.copyProperties(record, RecordResponse.class);
     }
 
     @Override
-    public Record updateRecord(Long id, RecordRequest request) {
+    public RecordResponse updateRecord(Long id, RecordRequest request) {
         Record existingRecord = recordMapper.findByIdAndUserId(id, request.getUserId());
         if (existingRecord == null) {
             return null;
@@ -95,7 +104,7 @@ public class RecordServiceImpl implements RecordService {
         existingRecord.setImageUrl(request.getImageUrl());
 
         int result = recordMapper.updateById(existingRecord);
-        return result > 0 ? existingRecord : null;
+        return result > 0 ? BeanUtil.copyProperties(existingRecord, RecordResponse.class) : null;
     }
 
     @Override

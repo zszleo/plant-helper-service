@@ -46,14 +46,14 @@ public class ReminderResponse {
     @Schema(description = "频率类型", allowableValues = {"daily", "weekly", "monthly", "custom"}, example = "weekly")
     private String frequencyType;
     
-    @Schema(description = "下次提醒时间", example = "2024-01-17T09:00:00")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @Schema(description = "下次提醒时间", example = "1770785605969")
+    @JsonFormat(shape = JsonFormat.Shape.NUMBER)
     private Date nextRemindTime;
     
     @Schema(description = "是否启用", example = "true")
     private Boolean isEnabled;
     
-    @Schema(description = "创建时间", example = "2024-01-01T10:00:00")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @Schema(description = "创建时间", example = "1770785605969")
+    @JsonFormat(shape = JsonFormat.Shape.NUMBER)
     private Date createTime;
 }

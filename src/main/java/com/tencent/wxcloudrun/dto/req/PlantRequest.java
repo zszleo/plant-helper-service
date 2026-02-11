@@ -3,7 +3,8 @@ package com.tencent.wxcloudrun.dto.req;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import java.time.LocalDateTime;
+
+import java.util.Date;
 
 /**
  * 植物信息请求DTO
@@ -40,7 +41,7 @@ public class PlantRequest {
     
     /** 种植日期 */
     @Schema(description = "种植日期", example = "2024-01-01T10:00:00")
-    private LocalDateTime plantDate;
+    private Date plantDate;
     
     /** 状态：healthy/growing/need-care/diseased */
     @Schema(description = "植物状态", allowableValues = {"healthy", "growing", "need-care", "diseased"}, example = "healthy")
@@ -57,10 +58,10 @@ public class PlantRequest {
     /** 上次浇水时间 */
     @Schema(description = "上次浇水时间", example = "2024-01-01T10:00:00")
     @JsonFormat(shape = JsonFormat.Shape.NUMBER)
-    private LocalDateTime lastWatering;
+    private Date lastWatering;
     
     /** 上次施肥时间 */
     @Schema(description = "上次施肥时间", example = "2024-01-01T10:00:00")
     @JsonFormat(shape = JsonFormat.Shape.NUMBER)
-    private LocalDateTime lastFertilizing;
+    private Date lastFertilizing;
 }

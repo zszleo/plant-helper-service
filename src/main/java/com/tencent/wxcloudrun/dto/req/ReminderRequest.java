@@ -3,7 +3,7 @@ package com.tencent.wxcloudrun.dto.req;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * 提醒信息请求DTO
@@ -50,7 +50,7 @@ public class ReminderRequest {
     /** 下次提醒时间 */
     @Schema(description = "下次提醒时间", example = "2024-01-01T09:00:00")
     @JsonFormat(shape = JsonFormat.Shape.NUMBER)
-    private LocalDateTime nextRemindTime;
+    private Date nextRemindTime;
     
     /** 是否启用 */
     @Schema(description = "是否启用", example = "true")

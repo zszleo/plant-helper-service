@@ -1,5 +1,6 @@
 package com.tencent.wxcloudrun.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tencent.wxcloudrun.dao.PlantMapper;
@@ -7,6 +8,8 @@ import com.tencent.wxcloudrun.dao.ReminderMapper;
 import com.tencent.wxcloudrun.dto.req.ReminderPageQueryRequest;
 import com.tencent.wxcloudrun.dto.req.ReminderRequest;
 import com.tencent.wxcloudrun.dto.resp.PageResponse;
+import com.tencent.wxcloudrun.dto.resp.RecordResponse;
+import com.tencent.wxcloudrun.dto.resp.ReminderResponse;
 import com.tencent.wxcloudrun.exception.BusinessException;
 import com.tencent.wxcloudrun.model.Plant;
 import com.tencent.wxcloudrun.model.Reminder;
@@ -14,8 +17,10 @@ import com.tencent.wxcloudrun.service.ReminderService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.time.LocalDateTime;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 提醒管理服务实现类
@@ -30,7 +35,7 @@ public class ReminderServiceImpl implements ReminderService {
     private PlantMapper plantMapper;
 
     @Override
-    public PageResponse<Reminder> getRemindersByPage(ReminderPageQueryRequest request) {
+    public PageResponse<ReminderResponse> getRemindersByPage(ReminderPageQueryRequest request) {
         Long userId = request.getUserId();
         Long plantId = request.getPlantId();
 
@@ -50,8 +55,10 @@ public class ReminderServiceImpl implements ReminderService {
         wrapper.orderByDesc("create_time");
         reminderMapper.selectPage(page, wrapper);
 
-        return PageResponse.<Reminder>builder()
-                .list(page.getRecords())
+        List<ReminderResponse> reminderResponses = BeanUtil.copyToList(page.getRecords(), ReminderResponse.class);
+
+        return PageResponse.<ReminderResponse>builder()
+                .list(reminderResponses)
                 .total(page.getTotal())
                 .pageNum(request.getPageNum())
                 .pageSize(request.getPageSize())
@@ -60,12 +67,13 @@ public class ReminderServiceImpl implements ReminderService {
     }
 
     @Override
-    public Reminder getReminderById(Long id, Long userId) {
-        return reminderMapper.findByIdAndUserId(id, userId);
+    public ReminderResponse getReminderById(Long id, Long userId) {
+        Reminder reminder = reminderMapper.findByIdAndUserId(id, userId);
+        return reminder != null ? BeanUtil.copyProperties(reminder,ReminderResponse.class) : null;
     }
 
     @Override
-    public Reminder createReminder(ReminderRequest request) {
+    public ReminderResponse createReminder(ReminderRequest request) {
         Plant plant = plantMapper.findByIdAndUserId(request.getPlantId(), request.getUserId());
         if (plant == null) {
             throw new BusinessException("植物不存在或无权访问");
@@ -83,11 +91,11 @@ public class ReminderServiceImpl implements ReminderService {
         reminder.setIsEnabled(request.getIsEnabled() != null ? request.getIsEnabled() : true);
 
         reminderMapper.insert(reminder);
-        return reminder;
+        return BeanUtil.copyProperties(reminder,ReminderResponse.class);
     }
 
     @Override
-    public Reminder updateReminder(Long id, ReminderRequest request) {
+    public ReminderResponse updateReminder(Long id, ReminderRequest request) {
         Reminder existingReminder = reminderMapper.findByIdAndUserId(id, request.getUserId());
         if (existingReminder == null) {
             return null;
@@ -102,7 +110,7 @@ public class ReminderServiceImpl implements ReminderService {
         existingReminder.setIsEnabled(request.getIsEnabled());
 
         int result = reminderMapper.updateById(existingReminder);
-        return result > 0 ? existingReminder : null;
+        return result > 0 ? BeanUtil.copyProperties(existingReminder,ReminderResponse.class) : null;
     }
 
     @Override
@@ -114,28 +122,41 @@ public class ReminderServiceImpl implements ReminderService {
     }
 
     @Override
-    public Reminder toggleReminder(Long id, Boolean enabled, Long userId) {
+    public ReminderResponse toggleReminder(Long id, Boolean enabled, Long userId) {
         int result = reminderMapper.toggleEnabled(id, userId, enabled);
         if (result > 0) {
-            return reminderMapper.findByIdAndUserId(id, userId);
+            Reminder reminder = reminderMapper.findByIdAndUserId(id, userId);
+            return reminder != null ? BeanUtil.copyProperties(reminder,ReminderResponse.class) : null;
         }
         return null;
     }
 
-    private LocalDateTime calculateNextRemindTime(ReminderRequest request) {
-        LocalDateTime now = LocalDateTime.now();
 
+    /**
+     * 计算下次提醒时间
+     */
+    private Date calculateNextRemindTime(ReminderRequest request) {
+        Calendar calendar = Calendar.getInstance();
+        
         switch (request.getFrequencyType()) {
             case "daily":
-                return now.plusDays(1);
+                calendar.add(Calendar.DAY_OF_MONTH, 1);
+                break;
             case "weekly":
-                return now.plusWeeks(1);
+                calendar.add(Calendar.WEEK_OF_YEAR, 1);
+                break;
             case "monthly":
-                return now.plusMonths(1);
+                calendar.add(Calendar.MONTH, 1);
+                break;
             case "custom":
-                return now.plusDays(request.getFrequency() != null ? request.getFrequency() : 1);
+                int days = request.getFrequency() != null ? request.getFrequency() : 1;
+                calendar.add(Calendar.DAY_OF_MONTH, days);
+                break;
             default:
-                return now.plusDays(1);
+                calendar.add(Calendar.DAY_OF_MONTH, 1);
+                break;
         }
+        
+        return calendar.getTime();
     }
 }

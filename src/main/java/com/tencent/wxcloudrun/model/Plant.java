@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * 植物信息实体类
@@ -33,7 +33,7 @@ public class Plant {
     private String imageUrl;
     
     /** 种植日期 */
-    private LocalDateTime plantDate;
+    private Date plantDate;
     
     /** 状态：healthy/growing/need-care/diseased */
     private String status;
@@ -45,14 +45,14 @@ public class Plant {
     private Integer fertilizingInterval;
     
     /** 上次浇水时间 */
-    private LocalDateTime lastWatering;
+    private Date lastWatering;
     
     /** 上次施肥时间 */
-    private LocalDateTime lastFertilizing;
+    private Date lastFertilizing;
     
     /** 创建时间 */
-    private LocalDateTime createTime;
+    private Date createTime;
     
     /** 更新时间 */
-    private LocalDateTime updateTime;
+    private Date updateTime;
 }

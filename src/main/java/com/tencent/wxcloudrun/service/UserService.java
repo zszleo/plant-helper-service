@@ -1,22 +1,13 @@
 package com.tencent.wxcloudrun.service;
 
-import com.tencent.wxcloudrun.dto.req.LoginRequest;
 import com.tencent.wxcloudrun.dto.req.ProfileRequest;
-import com.tencent.wxcloudrun.dto.resp.LoginResponse;
 import com.tencent.wxcloudrun.dto.resp.ProfileResponse;
 
 /**
- * 认证服务接口
+ * 用户接口
  * @author zszleon
  */
-public interface AuthService {
-
-    /**
-     * 微信登录
-     * @param request 登录请求
-     * @return 登录响应
-     */
-    LoginResponse login(LoginRequest request);
+public interface UserService {
 
     /**
      * 更新用户信息
@@ -33,9 +24,4 @@ public interface AuthService {
      */
     ProfileResponse getProfile(String openid);
 
-    /**
-     * 退出登录
-     * @param openid 用户openid
-     */
-    void logout(String openid);
 }

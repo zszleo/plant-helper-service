@@ -6,6 +6,7 @@ import com.tencent.wxcloudrun.dto.resp.ApiResponse;
 import com.tencent.wxcloudrun.dto.resp.PageResponse;
 import com.tencent.wxcloudrun.dto.req.PageQueryRequest;
 import com.tencent.wxcloudrun.dto.req.PlantRequest;
+import com.tencent.wxcloudrun.dto.resp.PlantResponse;
 import com.tencent.wxcloudrun.model.Plant;
 import com.tencent.wxcloudrun.service.PlantService;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -17,7 +18,6 @@ import javax.validation.Valid;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 /**
  * 植物管理控制器
@@ -35,27 +35,26 @@ public class PlantController {
     /**
      * 获取用户的所有植物（分页）
      */
-    @Operation(summary = "获取植物列表", description = "分页获取当前用户的植物列表，需要Token认证")
-    @SecurityRequirement(name = "TokenAuth")
+    @Operation(summary = "获取植物列表", description = "分页获取当前用户的植物列表")
     @PostMapping("/page")
-    public ApiResponse<PageResponse<Plant>> getPlantsPage(@Valid @RequestBody PageQueryRequest request,
-                                                          @Parameter(hidden = true) LoginUser loginUser) {
+    public ApiResponse<PageResponse<PlantResponse>> getPlantsPage(@Valid @RequestBody PageQueryRequest request,
+                                                                  @Parameter(hidden = true) LoginUser loginUser) {
         log.info("获取植物列表, 用户: {}, 页码: {}, 每页大小: {}", loginUser.getUserId(), request.getPageNum(), request.getPageSize());
         request.setUserId(loginUser.getUserId());
-        PageResponse<Plant> pageData = plantService.getPlantsByUserId(request);
+        PageResponse<PlantResponse> pageData = plantService.getPlantsByUserId(request);
+        log.info("{}",pageData);
         return ApiResponse.pageOk(pageData);
     }
 
     /**
      * 根据ID获取植物详情
      */
-    @Operation(summary = "获取植物详情", description = "根据植物ID获取植物详细信息，需要Token认证")
-    @SecurityRequirement(name = "TokenAuth")
+    @Operation(summary = "获取植物详情", description = "根据植物ID获取植物详细信息")
     @PostMapping("/getPlantById")
-    public ApiResponse<Plant> getPlantById(@RequestBody CommonRequest.Id id,
+    public ApiResponse<PlantResponse> getPlantById(@RequestBody CommonRequest.Id id,
                                            @Parameter(hidden = true) LoginUser loginUser) {
         log.info("获取植物详情, 用户: {}, 植物ID: {}", loginUser.getUserId(), id.getId());
-        Plant plant = plantService.getPlantById(id.getId(), loginUser.getUserId());
+        PlantResponse plant = plantService.getPlantById(id.getId(), loginUser.getUserId());
         if (plant != null) {
             return ApiResponse.ok(plant);
         } else {
@@ -66,30 +65,28 @@ public class PlantController {
     /**
      * 创建新植物
      */
-    @Operation(summary = "创建植物", description = "创建新的植物信息，需要Token认证")
-    @SecurityRequirement(name = "TokenAuth")
+    @Operation(summary = "创建植物", description = "创建新的植物信息")
     @PostMapping("/createPlant")
-    public ApiResponse<Plant> createPlant(@RequestBody PlantRequest request,
+    public ApiResponse<PlantResponse> createPlant(@RequestBody PlantRequest request,
                                           @Parameter(hidden = true) LoginUser loginUser) {
         // 设置用户ID
         request.setUserId(loginUser.getUserId());
         log.info("创建植物, 用户: {}, 植物名称: {}", loginUser.getUserId(), request.getName());
-        Plant plant = plantService.createPlant(request);
+        PlantResponse plant = plantService.createPlant(request);
         return ApiResponse.ok(plant);
     }
 
     /**
      * 更新植物信息
      */
-    @Operation(summary = "更新植物", description = "更新植物信息，需要Token认证")
-    @SecurityRequirement(name = "TokenAuth")
+    @Operation(summary = "更新植物", description = "更新植物信息")
     @PostMapping("/update")
-    public ApiResponse<Plant> updatePlant(@RequestBody PlantRequest request,
+    public ApiResponse<PlantResponse> updatePlant(@RequestBody PlantRequest request,
                                           @Parameter(hidden = true) LoginUser loginUser) {
         // 设置用户ID
         request.setUserId(loginUser.getUserId());
         log.info("更新植物, 用户: {}, 植物ID: {}, 植物名称: {}", loginUser.getUserId(), request.getId(), request.getName());
-        Plant plant = plantService.updatePlant(request.getId(), request);
+        PlantResponse plant = plantService.updatePlant(request.getId(), request);
         if (plant != null) {
             return ApiResponse.ok(plant);
         } else {
@@ -100,8 +97,7 @@ public class PlantController {
     /**
      * 删除植物
      */
-    @Operation(summary = "删除植物", description = "删除指定植物，需要Token认证")
-    @SecurityRequirement(name = "TokenAuth")
+    @Operation(summary = "删除植物", description = "删除指定植物")
     @PostMapping("/delete")
     public ApiResponse<String> deletePlant(@RequestBody CommonRequest.Id id,
                                            @Parameter(hidden = true) LoginUser loginUser) {

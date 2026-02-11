@@ -2,22 +2,20 @@ package com.tencent.wxcloudrun.controller;
 
 import com.tencent.wxcloudrun.auth.LoginUser;
 import com.tencent.wxcloudrun.dto.req.CommonRequest;
-import com.tencent.wxcloudrun.dto.resp.ApiResponse;
-import com.tencent.wxcloudrun.dto.resp.PageResponse;
 import com.tencent.wxcloudrun.dto.req.RecordPageQueryRequest;
 import com.tencent.wxcloudrun.dto.req.RecordRequest;
-import com.tencent.wxcloudrun.model.Record;
+import com.tencent.wxcloudrun.dto.resp.ApiResponse;
+import com.tencent.wxcloudrun.dto.resp.PageResponse;
+import com.tencent.wxcloudrun.dto.resp.RecordResponse;
 import com.tencent.wxcloudrun.service.RecordService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
-
-import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 /**
  * 生长记录管理控制器
@@ -35,29 +33,27 @@ public class RecordController {
     /**
      * 获取用户的所有记录（分页）
      */
-    @Operation(summary = "获取记录列表", description = "分页获取当前用户的生长记录列表，需要Token认证")
-    @SecurityRequirement(name = "TokenAuth")
+    @Operation(summary = "获取记录列表", description = "分页获取当前用户的生长记录列表")
     @PostMapping("/page")
-    public ApiResponse<PageResponse<Record>> getRecordsPage(@Valid @RequestBody RecordPageQueryRequest request,
-                                                            @Parameter(hidden = true) LoginUser loginUser) {
+    public ApiResponse<PageResponse<RecordResponse>> getRecordsPage(@Valid @RequestBody RecordPageQueryRequest request,
+                                                                    @Parameter(hidden = true) LoginUser loginUser) {
         // 设置用户ID
         request.setUserId(loginUser.getUserId());
         log.info("获取记录列表, 用户: {}, 页码: {}, 每页大小: {}", loginUser.getUserId(), request.getPageNum(), request.getPageSize());
-        PageResponse<Record> pageData = recordService.getRecordsByPage(request);
+        PageResponse<RecordResponse> pageData = recordService.getRecordsByPage(request);
         return ApiResponse.pageOk(pageData);
     }
 
     /**
      * 根据ID获取记录详情
      */
-    @Operation(summary = "获取记录详情", description = "根据记录ID获取生长记录详细信息，需要Token认证")
-    @SecurityRequirement(name = "TokenAuth")
+    @Operation(summary = "获取记录详情", description = "根据记录ID获取生长记录详细信息")
     @PostMapping("/getRecordById")
-    public ApiResponse<Record> getRecordById(@RequestBody CommonRequest.Id id,
-                                             @Parameter(hidden = true) LoginUser loginUser) {
+    public ApiResponse<RecordResponse> getRecordById(@RequestBody CommonRequest.Id id,
+                                                     @Parameter(hidden = true) LoginUser loginUser) {
         log.info("获取记录详情, 用户: {}, 记录ID: {}", loginUser.getUserId(), id.getId());
 
-        Record record = recordService.getRecordById(id.getId(), loginUser.getUserId());
+        RecordResponse record = recordService.getRecordById(id.getId(), loginUser.getUserId());
         if (record != null) {
             return ApiResponse.ok(record);
         } else {
@@ -68,31 +64,29 @@ public class RecordController {
     /**
      * 创建新记录
      */
-    @Operation(summary = "创建记录", description = "创建新的生长记录，需要Token认证")
-    @SecurityRequirement(name = "TokenAuth")
+    @Operation(summary = "创建记录", description = "创建新的生长记录")
     @PostMapping("/createRecord")
-    public ApiResponse<Record> createRecord(@RequestBody RecordRequest request,
-                                            @Parameter(hidden = true) LoginUser loginUser) {
+    public ApiResponse<RecordResponse> createRecord(@RequestBody RecordRequest request,
+                                                   @Parameter(hidden = true) LoginUser loginUser) {
         log.info("创建记录, 用户: {}, 植物ID: {}, 记录类型: {}", loginUser.getUserId(), request.getPlantId(), request.getType());
 
         // 设置用户ID
         request.setUserId(loginUser.getUserId());
-        Record record = recordService.createRecord(request);
+        RecordResponse record = recordService.createRecord(request);
         return ApiResponse.ok(record);
     }
 
     /**
      * 更新记录信息
      */
-    @Operation(summary = "更新记录", description = "更新生长记录信息，需要Token认证")
-    @SecurityRequirement(name = "TokenAuth")
+    @Operation(summary = "更新记录", description = "更新生长记录信息")
     @PostMapping("/update")
-    public ApiResponse<Record> updateRecord(@RequestBody RecordRequest request,
-                                            @Parameter(hidden = true) LoginUser loginUser) {
+    public ApiResponse<RecordResponse> updateRecord(@RequestBody RecordRequest request,
+                                                   @Parameter(hidden = true) LoginUser loginUser) {
         log.info("更新记录, 用户: {}, 记录ID: {}, 记录类型: {}", loginUser.getUserId(), request.getId(), request.getType());
         // 设置用户ID
         request.setUserId(loginUser.getUserId());
-        Record record = recordService.updateRecord(request.getId(), request);
+        RecordResponse record = recordService.updateRecord(request.getId(), request);
         if (record != null) {
             return ApiResponse.ok(record);
         } else {
@@ -103,8 +97,7 @@ public class RecordController {
     /**
      * 删除记录
      */
-    @Operation(summary = "删除记录", description = "删除指定生长记录，需要Token认证")
-    @SecurityRequirement(name = "TokenAuth")
+    @Operation(summary = "删除记录", description = "删除指定生长记录")
     @PostMapping("/delete")
     public ApiResponse<String> deleteRecord(@RequestBody CommonRequest.Id id,
                                             @Parameter(hidden = true) LoginUser loginUser) {

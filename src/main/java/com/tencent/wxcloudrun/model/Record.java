@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * 生长记录实体类
@@ -27,7 +27,7 @@ public class Record {
     private String type;
     
     /** 记录时间 */
-    private LocalDateTime recordTime;
+    private Date recordTime;
     
     /** 备注信息 */
     private String notes;
@@ -36,5 +36,5 @@ public class Record {
     private String imageUrl;
     
     /** 创建时间 */
-    private LocalDateTime createTime;
+    private Date createTime;
 }

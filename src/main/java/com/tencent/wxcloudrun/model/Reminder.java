@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * 提醒信息实体类
@@ -39,14 +39,14 @@ public class Reminder {
     private String frequencyType;
     
     /** 下次提醒时间 */
-    private LocalDateTime nextRemindTime;
+    private Date nextRemindTime;
     
     /** 是否启用 */
     private Boolean isEnabled;
     
     /** 创建时间 */
-    private LocalDateTime createTime;
+    private Date createTime;
     
     /** 更新时间 */
-    private LocalDateTime updateTime;
+    private Date updateTime;
 }
