@@ -49,6 +49,7 @@ public class ReminderRequest {
     
     /** 下次提醒时间 */
     @Schema(description = "下次提醒时间", example = "2024-01-01T09:00:00")
+    @JsonFormat(shape = JsonFormat.Shape.NUMBER)
     private LocalDateTime nextRemindTime;
     
     /** 是否启用 */

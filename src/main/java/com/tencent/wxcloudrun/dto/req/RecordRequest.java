@@ -33,6 +33,7 @@ public class RecordRequest {
     
     /** 记录时间 */
     @Schema(description = "记录时间", example = "2024-01-01T10:00:00")
+    @JsonFormat(shape = JsonFormat.Shape.NUMBER)
     private LocalDateTime recordTime;
     
     /** 备注信息 */

@@ -56,9 +56,11 @@ public class PlantRequest {
     
     /** 上次浇水时间 */
     @Schema(description = "上次浇水时间", example = "2024-01-01T10:00:00")
+    @JsonFormat(shape = JsonFormat.Shape.NUMBER)
     private LocalDateTime lastWatering;
     
     /** 上次施肥时间 */
     @Schema(description = "上次施肥时间", example = "2024-01-01T10:00:00")
+    @JsonFormat(shape = JsonFormat.Shape.NUMBER)
     private LocalDateTime lastFertilizing;
 }

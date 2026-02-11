@@ -5,23 +5,27 @@ import com.tencent.wxcloudrun.constant.CodeEnum;
 import com.tencent.wxcloudrun.context.TokenContext;
 import com.tencent.wxcloudrun.dto.resp.ApiResponse;
 import cn.hutool.json.JSONUtil;
+import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@Component
+
 /**
  * 统一认证拦截器
  * @author zszleon
  */
+@Slf4j
+@Component
 public class AuthInterceptor implements HandlerInterceptor {
     
-    @Resource
+    @Autowired
     private TokenContext tokenContext;
     
     @Override
@@ -46,7 +50,6 @@ public class AuthInterceptor implements HandlerInterceptor {
             writeUnauthorizedResponse(response, "缺少认证Token");
             return false;
         }
-        
         TokenContext.TokenInfo tokenInfo = tokenContext.validateToken(token);
         if (tokenInfo == null || tokenInfo.isExpired()) {
             writeUnauthorizedResponse(response, "Token无效或已过期");
