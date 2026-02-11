@@ -20,7 +20,7 @@ import java.util.Date;
 @Schema(description = "植物信息响应DTO")
 public class PlantResponse {
     
-    @Schema(description = "植物ID", example = "123456789")
+    @Schema(description = "植物ID", example = "123456789", type = "string")
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long id;
     
@@ -49,8 +49,8 @@ public class PlantResponse {
     @Schema(description = "施肥间隔（天）", example = "30")
     private Integer fertilizingInterval;
     
-    @Schema(description = "上次浇水时间", example = "1770785605969")
-    @JsonFormat(shape = JsonFormat.Shape.NUMBER)
+    @Schema(description = "上次浇水时间", example = "2026-02-11 08:59:59")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date lastWatering;
     
     @Schema(description = "上次施肥时间", example = "1770785605969")

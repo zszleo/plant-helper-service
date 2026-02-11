@@ -15,7 +15,7 @@ import com.tencent.wxcloudrun.dto.resp.PageResponse;
 @Data
 public class ApiResponse<T> implements Serializable {
 
-  @Schema(description = "响应码", example = "0")
+  @Schema(description = "响应码", example = "200")
   private Integer code;
   
   @Schema(description = "响应消息", example = "操作成功")

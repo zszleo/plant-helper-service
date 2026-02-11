@@ -11,11 +11,11 @@ public enum CodeEnum {
     /**
      * 成功
      */
-    SUCCESS(0, "操作成功"),
+    SUCCESS(200, "操作成功"),
     /**
      * 系统错误
      */
-    ERROR(1, "系统错误"),
+    ERROR(-1, "系统错误"),
     /**
      * 参数错误
      */

@@ -20,11 +20,11 @@ import java.util.Date;
 @Schema(description = "提醒信息响应DTO")
 public class ReminderResponse {
     
-    @Schema(description = "提醒ID", example = "123456789")
+    @Schema(description = "提醒ID", example = "123456789", type = "string")
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long id;
     
-    @Schema(description = "关联植物ID", example = "123456789")
+    @Schema(description = "关联植物ID", example = "123456789", type = "string")
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long plantId;
     

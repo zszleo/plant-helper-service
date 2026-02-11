@@ -9,7 +9,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @Schema(description = "提醒分页查询请求")
 public class ReminderPageQueryRequest extends PageQueryRequest {
-    @Schema(description = "植物ID（可选）", example = "123456789")
+    @Schema(description = "植物ID（可选）", example = "123456789", type = "string")
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long plantId;
 }

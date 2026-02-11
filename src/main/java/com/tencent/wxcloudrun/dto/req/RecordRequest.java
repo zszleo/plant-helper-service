@@ -13,17 +13,17 @@ import java.util.Date;
 @Schema(description = "生长记录请求DTO")
 public class RecordRequest {
     /** 记录ID */
-    @Schema(description = "记录ID，更新时必填", example = "123456789")
+    @Schema(description = "记录ID，更新时必填", example = "123456789", type = "string")
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long id;
     
     /** 用户ID */
-    @Schema(description = "用户ID，系统自动设置", hidden = true)
+    @Schema(description = "用户ID，系统自动设置", hidden = true, type = "string")
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long userId;
     
     /** 关联植物ID */
-    @Schema(description = "关联植物ID", example = "123456789")
+    @Schema(description = "关联植物ID", example = "123456789", type = "string")
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long plantId;
     

@@ -20,11 +20,11 @@ import java.util.Date;
 @Schema(description = "生长记录响应DTO")
 public class RecordResponse {
     
-    @Schema(description = "记录ID", example = "123456789")
+    @Schema(description = "记录ID", example = "123456789", type = "string")
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long id;
     
-    @Schema(description = "关联植物ID", example = "123456789")
+    @Schema(description = "关联植物ID", example = "123456789", type = "string")
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long plantId;
     

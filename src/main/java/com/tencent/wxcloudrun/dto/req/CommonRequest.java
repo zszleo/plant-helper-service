@@ -21,7 +21,7 @@ public class CommonRequest {
     @Data
     @Schema(description = "ID请求参数")
     public static class Id {
-        @Schema(description = "业务ID", example = "123456789")
+        @Schema(description = "业务ID", example = "123456789", type = "string")
         @NotBlank(message = "id不能为空")
         @JsonFormat(shape = JsonFormat.Shape.STRING)
         private Long id;
@@ -33,7 +33,7 @@ public class CommonRequest {
     @Data
     @Schema(description = "启用停用请求参数")
     public static class IsEnabled {
-        @Schema(description = "业务ID", example = "123456789")
+        @Schema(description = "业务ID", example = "123456789", type = "string")
         @NotBlank(message = "id不能为空")
         @JsonFormat(shape = JsonFormat.Shape.STRING)
         private Long id;
