@@ -48,8 +48,8 @@ public class ReminderRequest {
     private String frequencyType;
     
     /** 下次提醒时间 */
-    @Schema(description = "下次提醒时间", example = "2024-01-01T09:00:00")
-    @JsonFormat(shape = JsonFormat.Shape.NUMBER)
+    @Schema(description = "下次提醒时间", example = "2026-02-11 08:59:59")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date nextRemindTime;
     
     /** 是否启用 */

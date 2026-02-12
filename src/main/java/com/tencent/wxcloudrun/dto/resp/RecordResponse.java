@@ -34,8 +34,8 @@ public class RecordResponse {
     @Schema(description = "记录类型", allowableValues = {"watering", "fertilizing", "growth", "photo"}, example = "watering")
     private String type;
     
-    @Schema(description = "记录时间", example = "1770785605969")
-    @JsonFormat(shape = JsonFormat.Shape.NUMBER)
+    @Schema(description = "记录时间", example = "2026-02-11 08:59:59")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date recordTime;
     
     @Schema(description = "备注信息", example = "浇水500ml")
@@ -44,7 +44,7 @@ public class RecordResponse {
     @Schema(description = "图片URL", example = "https://example.com/record.jpg")
     private String imageUrl;
     
-    @Schema(description = "创建时间", example = "1770785605969")
-    @JsonFormat(shape = JsonFormat.Shape.NUMBER)
+    @Schema(description = "创建时间", example = "2026-02-11 08:59:59")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;
 }

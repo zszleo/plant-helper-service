@@ -36,8 +36,8 @@ public class PlantResponse {
     @Schema(description = "图片URL", example = "https://example.com/plant.jpg")
     private String imageUrl;
     
-    @Schema(description = "种植日期", example = "1770785605969")
-    @JsonFormat(shape = JsonFormat.Shape.NUMBER)
+    @Schema(description = "种植日期", example = "2026-02-11 08:59:59")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date plantDate;
     
     @Schema(description = "状态", allowableValues = {"healthy", "growing", "need-care", "diseased"}, example = "healthy")
@@ -53,11 +53,11 @@ public class PlantResponse {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date lastWatering;
     
-    @Schema(description = "上次施肥时间", example = "1770785605969")
-    @JsonFormat(shape = JsonFormat.Shape.NUMBER)
+    @Schema(description = "上次施肥时间", example = "2026-02-11 08:59:59")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date lastFertilizing;
     
-    @Schema(description = "创建时间", example = "1770785605969")
-    @JsonFormat(shape = JsonFormat.Shape.NUMBER)
+    @Schema(description = "创建时间", example = "2026-02-11 08:59:59")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;
 }

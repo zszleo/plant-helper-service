@@ -32,7 +32,7 @@ public class ProfileResponse {
     @Schema(description = "用户头像URL", example = "https://thirdwx.qlogo.cn/...")
     private String avatarUrl;
     
-    @Schema(description = "创建时间", example = "1770785605969")
-    @JsonFormat(shape = JsonFormat.Shape.NUMBER)
+    @Schema(description = "创建时间", example = "2026-02-11 08:59:59")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;
 }

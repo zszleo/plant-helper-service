@@ -40,7 +40,7 @@ public class PlantRequest {
     private String imageUrl;
     
     /** 种植日期 */
-    @Schema(description = "种植日期", example = "2024-01-01T10:00:00")
+    @Schema(description = "种植日期", example = "2026-02-11 08:59:59")
     private Date plantDate;
     
     /** 状态：healthy/growing/need-care/diseased */
@@ -56,12 +56,12 @@ public class PlantRequest {
     private Integer fertilizingInterval;
     
     /** 上次浇水时间 */
-    @Schema(description = "上次浇水时间", example = "2024-01-01T10:00:00")
-    @JsonFormat(shape = JsonFormat.Shape.NUMBER)
+    @Schema(description = "上次浇水时间", example = "2026-02-11 08:59:59")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date lastWatering;
     
     /** 上次施肥时间 */
-    @Schema(description = "上次施肥时间", example = "2024-01-01T10:00:00")
-    @JsonFormat(shape = JsonFormat.Shape.NUMBER)
+    @Schema(description = "上次施肥时间", example = "2026-02-11 08:59:59")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date lastFertilizing;
 }
