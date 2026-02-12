@@ -41,6 +41,7 @@ public class PlantRequest {
     
     /** 种植日期 */
     @Schema(description = "种植日期", example = "2026-02-11 08:59:59")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date plantDate;
     
     /** 状态：healthy/growing/need-care/diseased */
