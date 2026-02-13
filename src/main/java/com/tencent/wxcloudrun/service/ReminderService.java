@@ -40,4 +40,9 @@ public interface ReminderService {
      * 启用/禁用提醒（需要验证用户权限）
      */
     ReminderResponse toggleReminder(Long id, Boolean enabled, Long userId);
+
+    /**
+     * 根据植物ID获取提醒总数（需要验证用户权限）
+     */
+    Integer countRemindersByPlantId(Long plantId, Long userId);
 }

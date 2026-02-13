@@ -109,4 +109,12 @@ public class RecordController {
             return ApiResponse.error("记录不存在或无权删除");
         }
     }
+
+    @Operation(summary = "获取植物记录总数", description = "根据植物ID获取该植物的记录总数")
+    @PostMapping("/countByPlantId")
+    public ApiResponse<Integer> countRecordsByPlantId(@RequestBody CommonRequest.Id id,
+                                                      @Parameter(hidden = true) LoginUser loginUser) {
+        log.info("获取植物记录总数, 用户: {}, 植物ID: {}", loginUser.getUserId(), id.getId());
+        return ApiResponse.ok(recordService.countRecordsByPlantId(id.getId(), loginUser.getUserId()));
+    }
 }

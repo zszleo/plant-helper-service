@@ -114,4 +114,11 @@ public class RecordServiceImpl implements RecordService {
         int result = recordMapper.delete(wrapper);
         return result > 0;
     }
+
+    @Override
+    public Integer countRecordsByPlantId(Long plantId, Long userId) {
+        QueryWrapper<Record> wrapper = new QueryWrapper<>();
+        wrapper.eq("plant_id", plantId).eq("user_id", userId);
+        return Math.toIntExact(recordMapper.selectCount(wrapper));
+    }
 }

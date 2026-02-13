@@ -35,4 +35,9 @@ public interface RecordService {
      * 删除记录（需要验证用户权限）
      */
     boolean deleteRecord(Long id, Long userId);
+
+    /**
+     * 根据植物ID获取记录总数（需要验证用户权限）
+     */
+    Integer countRecordsByPlantId(Long plantId, Long userId);
 }

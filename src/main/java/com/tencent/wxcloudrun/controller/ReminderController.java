@@ -127,4 +127,12 @@ public class ReminderController {
             return ApiResponse.error("提醒不存在或无权操作");
         }
     }
+
+    @Operation(summary = "获取植物提醒总数", description = "根据植物ID获取该植物的提醒总数")
+    @PostMapping("/countByPlantId")
+    public ApiResponse<Integer> countRemindersByPlantId(@RequestBody CommonRequest.Id id,
+                                                        @Parameter(hidden = true) LoginUser loginUser) {
+        log.info("获取植物提醒总数, 用户: {}, 植物ID: {}", loginUser.getUserId(), id.getId());
+        return ApiResponse.ok(reminderService.countRemindersByPlantId(id.getId(), loginUser.getUserId()));
+    }
 }

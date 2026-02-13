@@ -159,4 +159,11 @@ public class ReminderServiceImpl implements ReminderService {
         
         return calendar.getTime();
     }
+
+    @Override
+    public Integer countRemindersByPlantId(Long plantId, Long userId) {
+        QueryWrapper<Reminder> wrapper = new QueryWrapper<>();
+        wrapper.eq("plant_id", plantId).eq("user_id", userId);
+        return Math.toIntExact(reminderMapper.selectCount(wrapper));
+    }
 }
