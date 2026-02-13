@@ -38,8 +38,8 @@ public class CommonRequest {
         @JsonFormat(shape = JsonFormat.Shape.STRING)
         private Long id;
         
-        @Schema(description = "是否启用（1-启用，0-停用）", allowableValues = {"0", "1"}, example = "1")
+        @Schema(description = "是否启用（1-启用，0-停用）", allowableValues = {"true", "false"}, example = "true")
         @NotBlank(message = "是否启用不能为空")
-        private Integer isEnabled;
+        private Boolean isEnabled;
     }
 }
