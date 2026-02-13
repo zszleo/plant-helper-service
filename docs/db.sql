@@ -5,6 +5,7 @@ DROP TABLE IF EXISTS `reminders`;
 DROP TABLE IF EXISTS `records`;
 DROP TABLE IF EXISTS `plants`;
 DROP TABLE IF EXISTS `users`;
+DROP TABLE IF EXISTS `wx_mini_program_log`;
 
 -- 创建用户表（用于数据关联，无需认证）
 CREATE TABLE IF NOT EXISTS `users` (
@@ -77,3 +78,25 @@ CREATE TABLE IF NOT EXISTS `reminders` (
     KEY `idx_is_enabled` (`is_enabled`),
     KEY `idx_next_remind_time` (`next_remind_time`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='提醒信息表';
+
+-- 小程序日志表
+CREATE TABLE IF NOT EXISTS `wx_mini_program_log` (
+    `id` bigint NOT NULL COMMENT '主键ID',
+    `code` varchar(50) DEFAULT NULL COMMENT '错误码',
+    `level` varchar(20) DEFAULT NULL COMMENT '日志级别',
+    `context` varchar(255) DEFAULT NULL COMMENT '上下文信息',
+    `api_name` varchar(255) DEFAULT NULL COMMENT '接口名称',
+    `operation` varchar(100) DEFAULT NULL COMMENT '操作',
+    `params` text COMMENT '请求参数（JSON格式）',
+    `path` varchar(500) DEFAULT NULL COMMENT '路径',
+    `device_info` json DEFAULT NULL COMMENT '设备信息（JSON格式）',
+    `message` text COMMENT '日志消息',
+    `processing_result` json DEFAULT NULL COMMENT '处理结果（JSON格式）',
+    `source` varchar(100) DEFAULT NULL COMMENT '来源',
+    `log_timestamp` timestamp DEFAULT NULL COMMENT '时间戳',
+    `type` varchar(50) DEFAULT NULL COMMENT '类型',
+    `user_message` text COMMENT '用户消息',
+    `create_time` timestamp DEFAULT NULL COMMENT '创建时间',
+    `update_time` timestamp DEFAULT NULL COMMENT '更新时间',
+    PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='小程序日志表';
